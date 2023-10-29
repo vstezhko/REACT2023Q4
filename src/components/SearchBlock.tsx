@@ -24,11 +24,11 @@ class SearchBlock extends Component<SearchBlockProps> {
     this.setState({
       value: e.target.value,
     });
-    localStorage.setItem('search', e.target.value);
+    localStorage.setItem('search', e.target.value.trim());
   };
 
   handleSearch = () => {
-    this.props.onSearch(this.state.value);
+    this.props.onSearch(this.state.value.trim());
   };
 
   handleClear = () => {
@@ -43,7 +43,7 @@ class SearchBlock extends Component<SearchBlockProps> {
     return (
       <div className="searchBlock">
         <label className="search" htmlFor="search">
-          <img className="search__img" src="../../public/find.svg" alt="logo" />
+          <img className="search__img" src="/find.svg" alt="logo" />
           <input
             type="text"
             id="search"

@@ -13,7 +13,7 @@ class Header extends Component<HeaderProps> {
         <div className="logo">
           <img
             className="logo__img"
-            src="../../public/starwars.svg"
+            src="/starwars.svg"
             alt="logo"
           />
           <h2>STARWARS</h2>
