@@ -17,9 +17,7 @@ class Header extends Component<HeaderProps> {
           />
           <h2>STARWARS</h2>
         </div>
-        <SearchBlock
-          onSearch={this.props.onSearch}
-        />
+        <SearchBlock onSearch={this.props.onSearch} />
       </header>
     );
   }

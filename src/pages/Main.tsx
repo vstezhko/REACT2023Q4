@@ -79,9 +79,7 @@ class Main extends Component {
   render() {
     return (
       <>
-        <Header
-          onSearch={this.handleSearchValue}
-        />
+        <Header onSearch={this.handleSearchValue} />
         <SearchResults
           items={this.state.searchResults}
           loading={this.state.isLoading}
