@@ -111,7 +111,7 @@ h4 {
   height: 2.1rem;
 }
 
-.searchBlock .searchBtn {
+.btn {
   display: flex;
   padding: 1.4rem;
   justify-content: center;
@@ -132,14 +132,29 @@ h4 {
   transition: all 0.3s ease;
 }
 
-.searchBlock .searchBtn:hover {
+.btn:hover {
   background: #1d75ff;
   border: 2px solid #1d75ff;
 }
 
-.searchBlock .searchBtn:active {
+.btn:active {
   background: #005bff;
   border: 2px solid #005bff;
+}
+
+.btn_error {
+  border: 2px solid #f94762;
+  background: #f94762;
+}
+
+.btn_error:hover {
+  border: 2px solid #ff1a3a;
+  background: #ff1a3a;
+}
+
+.btn_error:active {
+  border: 2px solid #d3001c;
+  background: #d3001c;
 }
 
 .searchResults {
@@ -166,4 +181,9 @@ h4 {
 
 .card span {
   color: #478bf9;
+}
+
+.fallback {
+  padding: 10rem 0;
+  font-size: 3rem;
 }

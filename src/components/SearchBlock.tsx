@@ -51,10 +51,10 @@ class SearchBlock extends Component<SearchBlockProps> {
             value={this.state.value}
           />
         </label>
-        <button className="searchBtn" onClick={this.handleSearch}>
+        <button className="btn" onClick={this.handleSearch}>
           SEARCH
         </button>
-        <button className="searchBtn" onClick={this.handleClear}>
+        <button className="btn" onClick={this.handleClear}>
           CLEAR
         </button>
       </div>
