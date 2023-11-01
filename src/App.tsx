@@ -1,6 +1,14 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Main from './pages/Main';
 import ErrorBoundary from './components/ErrorBoundary';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Main />,
+  },
+]);
 
 class App extends Component {
   render() {
@@ -9,7 +17,7 @@ class App extends Component {
         <ErrorBoundary
           fallback={<p className="fallback">Something went wrong</p>}
         >
-          <Main />
+          <RouterProvider router={router} />
         </ErrorBoundary>
       </div>
     );
