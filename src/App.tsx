@@ -9,9 +9,7 @@ class App extends Component {
         <ErrorBoundary
           fallback={<p className="fallback">Something went wrong</p>}
         >
-          <div className="main wrapper">
-            <Main />
-          </div>
+          <Main />
         </ErrorBoundary>
       </div>
     );

@@ -1,92 +1,72 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import SearchResults from '../components/SearchResults';
 import { ApiService } from '../api/Api.Service';
 
-type StateType = {
-  isLoading: boolean;
-  searchValue: null | string;
-  page: number;
-  searchResults: SearchResultsType;
-};
-
-type SearchResultsType = {
+interface SearchResultsResponse {
   count: number;
   next: string | null;
   previous: string | null;
   results: [];
-};
+}
 
-class Main extends Component {
-  state: StateType = {
-    isLoading: false,
+interface SearchData {
+  searchValue: string | null;
+  page: number;
+}
+
+const Main = () => {
+  const [searchResults, setSearchResults] = useState<SearchResultsResponse>({
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  });
+
+  const [searchData, setSearchData] = useState<SearchData>({
     searchValue: null,
     page: 1,
-    searchResults: {
-      count: 0,
-      next: null,
-      previous: null,
-      results: [],
-    },
-  };
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  componentDidMount() {
-    const lsSearchValue = localStorage.getItem('search');
-    this.setState({
-      ...this.state,
-      searchValue: lsSearchValue || '',
-    });
-  }
+  useEffect(() => {
+    if (typeof searchData.searchValue === 'string') {
+      updateSearchResults(searchData.searchValue, searchData.page);
+    } else {
+      const lsSearchValue = localStorage.getItem('search');
+      setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
+    }
+  }, [searchData]);
 
-  async updateSearchResults(searchValue: string, page: number) {
+  const updateSearchResults = async (searchValue: string, page: number) => {
     try {
-      this.setState({ isLoading: true });
+      setIsLoading(true);
 
-      const results = await ApiService.search(searchValue, page);
+      const results: SearchResultsResponse = await ApiService.search(
+        searchValue,
+        page
+      );
 
       if (results) {
-        this.setState({
-          searchResults: results,
-          page: 1,
-          isLoading: false,
-        });
+        setSearchResults(results);
       }
     } catch (error) {
       console.error(error);
-      this.setState({ isLoading: false });
+    } finally {
+      setIsLoading(false);
     }
-  }
-
-  async componentDidUpdate(
-    prevProps: Readonly<unknown>,
-    prevState: Readonly<StateType>
-  ) {
-    if (
-      this.state.searchValue !== null &&
-      this.state.searchValue !== prevState.searchValue
-    ) {
-      this.updateSearchResults(this.state.searchValue, this.state.page);
-    }
-  }
-
-  handleSearchValue = (newValue: string) => {
-    this.setState({
-      ...this.state,
-      searchValue: newValue,
-    });
   };
 
-  render() {
-    return (
-      <>
-        <Header onSearch={this.handleSearchValue} />
-        <SearchResults
-          items={this.state.searchResults}
-          loading={this.state.isLoading}
-        />
-      </>
-    );
-  }
-}
+  const handleSearchValue = (newValue: string) => {
+    const startPage: number = 1;
+    setSearchData({ searchValue: newValue, page: startPage });
+  };
 
+  return (
+    <div className="main wrapper">
+      <Header onSearch={handleSearchValue} />
+      <SearchResults items={searchResults} loading={isLoading} />
+    </div>
+  );
+};
 export default Main;
