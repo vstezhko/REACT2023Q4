@@ -7,7 +7,12 @@ interface SearchResultsResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: [];
+  results: {
+    name: string;
+    gender: string;
+    hair_color: string;
+    birth_year: string;
+  }[];
 }
 
 interface SearchData {
@@ -70,7 +75,7 @@ const Main = () => {
         onSearch={handleSearchValue}
         searchInitialValue={searchData.searchValue || ''}
       />
-      <SearchResults items={searchResults} loading={isLoading} />
+      <SearchResults results={searchResults.results} loading={isLoading} />
     </div>
   );
 };
