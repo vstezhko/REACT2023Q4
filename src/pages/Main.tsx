@@ -24,7 +24,7 @@ const Main = () => {
   });
 
   const [searchData, setSearchData] = useState<SearchData>({
-    searchValue: null,
+    searchValue: localStorage.getItem('search') || null,
     page: 1,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -66,7 +66,10 @@ const Main = () => {
 
   return (
     <div className="main wrapper">
-      <Header onSearch={handleSearchValue} />
+      <Header
+        onSearch={handleSearchValue}
+        searchInitialValue={searchData.searchValue || ''}
+      />
       <SearchResults items={searchResults} loading={isLoading} />
     </div>
   );

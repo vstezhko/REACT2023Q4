@@ -1,65 +1,44 @@
-import React, { Component } from 'react';
+import React, { BaseSyntheticEvent, FC, useState } from 'react';
+import Btn from './Btn';
 
-interface SearchBlockProps {
+interface SearchBlockParams {
+  initialValue: string;
   onSearch: (newValue: string) => void;
 }
 
-type StateType = {
-  value: string;
-};
+const SearchBlock: FC<SearchBlockParams> = ({ initialValue, onSearch }) => {
+  const [searchValue, setSearchValue] = useState(initialValue);
 
-class SearchBlock extends Component<SearchBlockProps> {
-  state: StateType = {
-    value: '',
-  };
-
-  componentDidMount() {
-    const lsSearchValue = localStorage.getItem('search');
-    this.setState({
-      value: lsSearchValue || '',
-    });
-  }
-
-  handleInputChange = (e: React.BaseSyntheticEvent) => {
-    this.setState({
-      value: e.target.value,
-    });
+  const handleInputChange = (e: BaseSyntheticEvent) => {
+    setSearchValue(e.target.value);
     localStorage.setItem('search', e.target.value.trim());
   };
 
-  handleSearch = () => {
-    this.props.onSearch(this.state.value.trim());
+  const handleSearch = () => {
+    onSearch(searchValue.trim());
   };
 
-  handleClear = () => {
-    this.props.onSearch('');
+  const handleClear = (e: BaseSyntheticEvent) => {
+    onSearch('');
     localStorage.setItem('search', '');
-    this.setState({
-      value: '',
-    });
+    setSearchValue(e.target.value);
   };
 
-  render() {
-    return (
-      <div className="searchBlock">
-        <label className="search" htmlFor="search">
-          <img className="search__img" src="/find.svg" alt="logo" />
-          <input
-            type="text"
-            id="search"
-            onChange={this.handleInputChange}
-            value={this.state.value}
-          />
-        </label>
-        <button className="btn" onClick={this.handleSearch}>
-          SEARCH
-        </button>
-        <button className="btn" onClick={this.handleClear}>
-          CLEAR
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="searchBlock">
+      <label className="searchBlock__label" htmlFor="search">
+        <img className="searchBlock__img" src="/find.svg" alt="search" />
+        <input
+          type="text"
+          id="search"
+          onChange={handleInputChange}
+          value={searchValue}
+        />
+      </label>
+      <Btn onClick={handleSearch} title="SEARCH" />
+      <Btn onClick={handleClear} title="CLEAR" />
+    </div>
+  );
+};
 
 export default SearchBlock;

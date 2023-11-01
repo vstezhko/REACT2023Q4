@@ -78,7 +78,7 @@ h4 {
   gap: 2rem;
 }
 
-.searchBlock .search {
+.searchBlock .searchBlock__label {
   display: flex;
   padding: 1.4rem;
   justify-content: center;
@@ -90,23 +90,23 @@ h4 {
   transition: all 0.3s ease-in;
 }
 
-.searchBlock .search:focus-within {
+.searchBlock .searchBlock__label:focus-within {
   border: 2px solid #c1d9ff;
   background: rgba(255, 255, 255, 0.12);
 }
 
-.searchBlock .search input {
+.searchBlock .searchBlock__label input {
   background: none;
   border: none;
   width: 100%;
   color: #c1d9ff;
 }
 
-.searchBlock .search input:focus-visible {
+.searchBlock .searchBlock__label input:focus-visible {
   outline: none;
 }
 
-.searchBlock .search .search__img {
+.searchBlock .searchBlock__label .searchBlock__img {
   height: 2.1rem;
 }
 
