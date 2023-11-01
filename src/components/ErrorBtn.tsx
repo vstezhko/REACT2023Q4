@@ -1,26 +1,21 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class ErrorBtn extends Component {
-  state = {
-    error: false,
+const ErrorBtn = () => {
+  const [isError, setIsError] = useState<boolean>(false);
+
+  const generateError = () => {
+    setIsError(true);
   };
 
-  generateError = () => {
-    this.setState({
-      error: true,
-    });
-  };
-
-  render() {
-    if (this.state.error) {
-      throw new Error('Synthetic error');
-    }
-    return (
-      <button className="btn btn_error" onClick={this.generateError}>
-        {'Generate error'}
-      </button>
-    );
+  if (isError) {
+    throw new Error('Synthetic Btn error');
   }
-}
+
+  return (
+    <button className="btn btn_error" onClick={generateError}>
+      Generate error
+    </button>
+  );
+};
 
 export default ErrorBtn;
