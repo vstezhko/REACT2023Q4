@@ -32,7 +32,9 @@ const Main = () => {
   useEffect(() => {
     if (typeof searchData.searchValue === 'string') {
       updateSearchResults(searchData.searchValue, searchData.page);
-    } else {
+    }
+
+    if (searchData.searchValue === null) {
       const lsSearchValue = localStorage.getItem('search');
       setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
     }
