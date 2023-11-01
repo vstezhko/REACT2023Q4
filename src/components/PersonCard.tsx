@@ -1,31 +1,34 @@
-import { Component } from 'react';
+import { FC } from 'react';
 
-interface PersonCardProps {
+interface PersonCardParams {
   name: string;
   gender: string;
   hairColor: string;
   birthYear: string;
 }
 
-class PersonCard extends Component<PersonCardProps> {
-  render() {
-    return (
-      <div className="card">
-        <h4>
-          <span>name:</span> {this.props.name}
-        </h4>
-        <p>
-          <span>gender:</span> {this.props.gender}
-        </p>
-        <p>
-          <span>hair color:</span> {this.props.hairColor}
-        </p>
-        <p>
-          <span>birth year:</span> {this.props.birthYear}
-        </p>
-      </div>
-    );
-  }
-}
+const PersonCard: FC<PersonCardParams> = ({
+  name,
+  gender,
+  hairColor,
+  birthYear,
+}) => {
+  return (
+    <div className="card">
+      <h4>
+        <span>name:</span> {name}
+      </h4>
+      <p>
+        <span>gender:</span> {gender}
+      </p>
+      <p>
+        <span>hair color:</span> {hairColor}
+      </p>
+      <p>
+        <span>birth year:</span> {birthYear}
+      </p>
+    </div>
+  );
+};
 
 export default PersonCard;
