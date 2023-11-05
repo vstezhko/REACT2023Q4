@@ -52,7 +52,6 @@ const MainInfo = () => {
     const page = searchParams.get('page') || 1;
 
     if (search !== searchData.searchValue || +page !== searchData.page) {
-      console.log('set', search, +page);
       setSearchData({
         searchValue: search,
         page: +page,
