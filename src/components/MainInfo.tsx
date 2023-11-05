@@ -83,7 +83,7 @@ const MainInfo = () => {
       updateSearchResults(searchData.searchValue, searchData.page);
     }
 
-    if (searchData.searchValue === null) {
+    if (searchResults.results && searchData.searchValue === null) {
       const lsSearchValue = localStorage.getItem('search');
       setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
     }
