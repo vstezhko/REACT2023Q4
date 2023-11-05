@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import Loader from './Loader';
 import { ApiService } from '../api/Api.Service';
 import SearchResults from './SearchResults';
@@ -49,9 +49,8 @@ const MainInfo = () => {
       page: +page,
     });
   }, [searchParams]);
-
-  useEffect(() => {
-    const updateSearchResults = async (searchValue: string, page: number) => {
+  const updateSearchResults = useCallback(
+    async (searchValue: string, page: number) => {
       try {
         setIsLoading(true);
 
@@ -64,7 +63,8 @@ const MainInfo = () => {
           setSearchResults(results);
 
           const searchURL = searchParams.get('search') || '';
-          const pageURL = searchParams.get('page') || 1;
+          const pageURL = parseInt(searchParams.get('page') || '1', 10);
+
           if (searchData.page !== pageURL) {
             navigate(`?search=${searchURL}&page=${searchData.page}`);
           }
@@ -74,8 +74,11 @@ const MainInfo = () => {
       } finally {
         setIsLoading(false);
       }
-    };
+    },
+    [setIsLoading, setSearchResults, searchData, searchParams, navigate]
+  );
 
+  useEffect(() => {
     if (typeof searchData.searchValue === 'string') {
       updateSearchResults(searchData.searchValue, searchData.page);
     }
@@ -84,7 +87,7 @@ const MainInfo = () => {
       const lsSearchValue = localStorage.getItem('search');
       setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
     }
-  }, [navigate, searchData, searchParams]);
+  }, [searchData, updateSearchResults]);
 
   const handlePageChange = (newPage: number) => {
     setSearchParams({
