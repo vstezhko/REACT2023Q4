@@ -31,7 +31,7 @@ const Main = () => {
 
   const [searchData, setSearchData] = useState<SearchData>({
     searchValue: localStorage.getItem('search') || null,
-    page: 2,
+    page: 1,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
