@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import SearchResults from '../components/SearchResults';
 import { ApiService } from '../api/Api.Service';
+import Pagination from '../components/Pagination';
 
 interface SearchResultsResponse {
   count: number;
@@ -30,7 +31,7 @@ const Main = () => {
 
   const [searchData, setSearchData] = useState<SearchData>({
     searchValue: localStorage.getItem('search') || null,
-    page: 1,
+    page: 2,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -69,6 +70,13 @@ const Main = () => {
     setSearchData({ searchValue: newValue, page: startPage });
   };
 
+  const handlePageChange = (newPage: number) => {
+    setSearchData({
+      ...searchData,
+      page: newPage,
+    });
+  };
+
   return (
     <div className="main wrapper">
       <Header
@@ -76,6 +84,11 @@ const Main = () => {
         searchInitialValue={searchData.searchValue || ''}
       />
       <SearchResults results={searchResults.results} loading={isLoading} />
+      <Pagination
+        pageCount={Math.ceil(searchResults.count / 10)}
+        currentPage={searchData.page}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 };
