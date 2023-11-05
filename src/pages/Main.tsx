@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import SearchResults from '../components/SearchResults';
 import { ApiService } from '../api/Api.Service';
 import Pagination from '../components/Pagination';
+import MainInfo from '../components/MainInfo';
 
 interface SearchResultsResponse {
   count: number;
@@ -83,12 +84,16 @@ const Main = () => {
         onSearch={handleSearchValue}
         searchInitialValue={searchData.searchValue || ''}
       />
-      <SearchResults results={searchResults.results} loading={isLoading} />
-      <Pagination
-        pageCount={Math.ceil(searchResults.count / 10 || 1)}
-        currentPage={searchData.page}
-        handlePageChange={handlePageChange}
-      />
+      <MainInfo isLoading={isLoading}>
+        <>
+          <SearchResults results={searchResults.results} />
+          <Pagination
+            pageCount={Math.ceil(searchResults.count / 10 || 1)}
+            currentPage={searchData.page}
+            handlePageChange={handlePageChange}
+          />
+        </>
+      </MainInfo>
     </div>
   );
 };

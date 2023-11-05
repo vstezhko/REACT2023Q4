@@ -2,7 +2,6 @@ import { FC } from 'react';
 import PersonCard from './PersonCard';
 
 interface SearchResultsParams {
-  loading: boolean;
   results: {
     name: string;
     gender: string;
@@ -11,12 +10,10 @@ interface SearchResultsParams {
   }[];
 }
 
-const SearchResults: FC<SearchResultsParams> = ({ loading, results }) => {
+const SearchResults: FC<SearchResultsParams> = ({ results }) => {
   return (
     <div className="searchResults">
-      {loading
-        ? '...LOADING'
-        : results.length
+      {results.length
         ? results.map((i, index) => (
             <PersonCard
               key={index}
