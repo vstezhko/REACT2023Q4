@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 import Loader from './Loader';
 import { ApiService } from '../api/Api.Service';
 import SearchResults from './SearchResults';
@@ -49,6 +49,7 @@ const MainInfo = () => {
       page: +page,
     });
   }, [searchParams]);
+
   const updateSearchResults = useCallback(
     async (searchValue: string, page: number) => {
       try {
@@ -63,8 +64,7 @@ const MainInfo = () => {
           setSearchResults(results);
 
           const searchURL = searchParams.get('search') || '';
-          const pageURL = parseInt(searchParams.get('page') || '1', 10);
-
+          const pageURL = searchParams.get('page') || 1;
           if (searchData.page !== pageURL) {
             navigate(`?search=${searchURL}&page=${searchData.page}`);
           }
@@ -87,7 +87,7 @@ const MainInfo = () => {
       const lsSearchValue = localStorage.getItem('search');
       setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
     }
-  }, [searchData, updateSearchResults]);
+  }, [searchData]);
 
   const handlePageChange = (newPage: number) => {
     setSearchParams({
