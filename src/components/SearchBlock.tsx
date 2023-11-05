@@ -1,13 +1,41 @@
-import React, { BaseSyntheticEvent, FC, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import Btn from './Btn';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-interface SearchBlockParams {
-  initialValue: string;
-  onSearch: (newValue: string) => void;
+interface SearchData {
+  searchValue: string | null;
+  page: number;
 }
 
-const SearchBlock: FC<SearchBlockParams> = ({ initialValue, onSearch }) => {
-  const [searchValue, setSearchValue] = useState(initialValue);
+const SearchBlock = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [searchData, setSearchData] = useState<SearchData>({
+    searchValue: null,
+    page: 1,
+  });
+  const [searchValue, setSearchValue] = useState(searchData.searchValue || '');
+
+  useEffect(() => {
+    const searchURL = searchParams.get('search') || null;
+    const pageURL = searchParams.get('page') || 1;
+
+    const searchValFromLS = localStorage.getItem('search');
+    const searchVal = searchURL !== null ? searchURL : searchValFromLS || '';
+
+    setSearchData({
+      searchValue: searchVal,
+      page: +pageURL,
+    });
+    setSearchValue(searchVal);
+    localStorage.setItem('search', searchVal.trim());
+    navigate(`?search=${searchVal}&page=${+pageURL}`);
+  }, [navigate, searchParams]);
+  const handleSearchValue = (newValue: string) => {
+    const startPage: number = 1;
+    setSearchData({ searchValue: newValue, page: startPage });
+    navigate(`?search=${newValue}&page=${startPage}`);
+  };
 
   const handleInputChange = (e: BaseSyntheticEvent) => {
     setSearchValue(e.target.value);
@@ -15,11 +43,11 @@ const SearchBlock: FC<SearchBlockParams> = ({ initialValue, onSearch }) => {
   };
 
   const handleSearch = () => {
-    onSearch(searchValue.trim());
+    handleSearchValue(searchValue.trim());
   };
 
   const handleClear = (e: BaseSyntheticEvent) => {
-    onSearch('');
+    handleSearchValue('');
     localStorage.setItem('search', '');
     setSearchValue(e.target.value);
   };

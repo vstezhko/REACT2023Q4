@@ -1,5 +1,4 @@
-import React, { FC, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC } from 'react';
 
 interface PaginationParams {
   pageCount: number;
@@ -12,11 +11,6 @@ const Pagination: FC<PaginationParams> = ({
   handlePageChange,
   currentPage = 1,
 }) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate(`?page=${currentPage}`);
-  }, [currentPage, navigate]);
   const onChange = (page: number) => {
     if (page > 0 && page <= pageCount && page !== currentPage)
       handlePageChange(page);
