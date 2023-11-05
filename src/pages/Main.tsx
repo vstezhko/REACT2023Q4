@@ -85,7 +85,7 @@ const Main = () => {
       />
       <SearchResults results={searchResults.results} loading={isLoading} />
       <Pagination
-        pageCount={Math.ceil(searchResults.count / 10)}
+        pageCount={Math.ceil(searchResults.count / 10 || 1)}
         currentPage={searchData.page}
         handlePageChange={handlePageChange}
       />

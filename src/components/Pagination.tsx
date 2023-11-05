@@ -16,6 +16,8 @@ const Pagination: FC<PaginationParams> = ({
       handlePageChange(page);
   };
 
+  console.log(pageCount);
+
   return (
     <div className="pagination">
       <div
@@ -44,13 +46,11 @@ const Pagination: FC<PaginationParams> = ({
       ) : (
         ''
       )}
-      {pageCount > 1 ? (
-        <div className="pagination__item active">
-          <p>{currentPage}</p>
-        </div>
-      ) : (
-        ''
-      )}
+
+      <div className="pagination__item active">
+        <p>{currentPage}</p>
+      </div>
+
       {pageCount > 2 && currentPage < pageCount ? (
         <div
           className="pagination__item"
