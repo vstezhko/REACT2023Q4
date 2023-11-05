@@ -181,6 +181,7 @@ main {
 }
 
 .card {
+  cursor: pointer;
   border-radius: 19.6rem;
   background: #1e1231;
   padding: 1.6rem 6.4rem;
