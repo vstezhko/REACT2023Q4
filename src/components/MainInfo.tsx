@@ -1,9 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  BaseSyntheticEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import Loader from './Loader';
 import { ApiService } from '../api/Api.Service';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Outlet } from 'react-router-dom';
 
 interface Search {
   searchValue: null | string;
@@ -20,6 +25,7 @@ interface SearchResultsResponse {
         gender: string;
         hair_color: string;
         birth_year: string;
+        url: string;
       }[]
     | null;
 }
@@ -42,12 +48,16 @@ const MainInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const search = searchParams.get('search') || null;
+    const search = searchParams.get('search') || '';
     const page = searchParams.get('page') || 1;
-    setSearchData({
-      searchValue: search,
-      page: +page,
-    });
+
+    if (search !== searchData.searchValue || +page !== searchData.page) {
+      console.log('set', search, +page);
+      setSearchData({
+        searchValue: search,
+        page: +page,
+      });
+    }
   }, [searchParams]);
 
   const updateSearchResults = useCallback(
@@ -96,20 +106,34 @@ const MainInfo = () => {
     });
   };
 
+  const handleClose = (e: BaseSyntheticEvent) => {
+    e.stopPropagation();
+    if (e.target.className === 'searchResults') {
+      navigate(
+        `/?search=${searchParams.get('search')}&page=${searchParams.get(
+          'page'
+        )}`
+      );
+    }
+  };
+
   return (
     <main className="mainInfo">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <SearchResults results={searchResults.results} />
-          <Pagination
-            pageCount={Math.ceil(searchResults.count / 10 || 1)}
-            currentPage={searchData.page}
-            handlePageChange={handlePageChange}
-          />
-        </>
-      )}
+      <div className="mainInfo__searchResults" onClick={handleClose}>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <SearchResults results={searchResults.results} />
+            <Pagination
+              pageCount={Math.ceil(searchResults.count / 10 || 1)}
+              currentPage={searchData.page}
+              handlePageChange={handlePageChange}
+            />
+          </>
+        )}
+      </div>
+      <Outlet />
     </main>
   );
 };

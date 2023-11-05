@@ -8,6 +8,7 @@ interface SearchResultsParams {
         gender: string;
         hair_color: string;
         birth_year: string;
+        url: string;
       }[]
     | null;
 }
@@ -23,6 +24,7 @@ const SearchResults: FC<SearchResultsParams> = ({ results }) => {
               gender={i.gender}
               hairColor={i.hair_color}
               birthYear={i.birth_year}
+              url={i.url}
             />
           ))
         : 'There are NO ITEMS'}

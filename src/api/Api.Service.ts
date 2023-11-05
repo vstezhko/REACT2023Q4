@@ -15,6 +15,16 @@ const search = async (
   }
 };
 
+const getPerson = async (id: number) => {
+  try {
+    const res = await fetch(`${API_URL}people/${id}`);
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const ApiService = {
   search,
+  getPerson,
 };
