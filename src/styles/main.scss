@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  text-underline: none;
+  color: inherit;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  font-family: Lexend, serif;
+}
+
+html {
+  height: 100%;
+  font-size: 10px;
+  color: $light;
+}
+
+#root {
+  height: 100%;
+}
+
+h1 {
+  font-size: 5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 7rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 2.1rem;
+}
+
+h4 {
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.background {
+  min-height: 100%;
+  background: #110a1d;
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper {
+  max-width: 117rem;
+  min-height: 100%;
+  width: 100%;
+  margin: 0 1rem;
+}
+
+.border {
+  border-radius: 7rem;
+  border: 3px solid $base;
+  background: $background;
+  backdrop-filter: blur(10px);
+  padding: 2.4rem;
+  transition: all 0.3s ease;
+}
+
+.fallback {
+  padding: 10rem 0;
+  font-size: 3rem;
+}
+
+.mainInfo {
+  display: flex;
+  gap: 1rem;
+
+  .mainInfo__searchResults {
+    width: 100%;
+  }
+}

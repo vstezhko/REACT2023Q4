@@ -1,0 +1,20 @@
+.header {
+  display: flex;
+  padding: 2.4rem 4.8rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6.4rem;
+  border: 3px solid $base;
+  margin-top: 1.6rem;
+  margin-bottom: 5rem;
+
+  .logo {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .logo__img {
+    height: 5rem;
+  }
+}
