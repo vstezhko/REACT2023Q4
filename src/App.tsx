@@ -14,6 +14,7 @@ const router = createBrowserRouter([
         element: <Details />,
       },
     ],
+    errorElement: <p className="fallback">Something went wrong</p>,
   },
 ]);
 
