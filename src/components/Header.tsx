@@ -7,7 +7,7 @@ const Header = () => {
     <header className="header">
       <div className="logo">
         <img className="logo__img" src="/harry.svg" alt="logo" />
-        <h2>HARRY POTTER</h2>
+        <h2 className="logo__title">HARRY POTTER</h2>
       </div>
       <SearchBlock />
       <ErrorBtn />

@@ -8,7 +8,7 @@ const ErrorBtn = () => {
   };
 
   if (isError) {
-    throw new Error('Synthetic Btn error');
+    throw new ErrorEvent('Synthetic Btn error');
   }
 
   return (

@@ -3,6 +3,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 a {
@@ -51,19 +52,16 @@ h4 {
 .background {
   min-height: 100%;
   background: #110a1d;
-  display: flex;
-  justify-content: center;
 }
 
 .wrapper {
   max-width: 117rem;
   min-height: 100%;
-  width: 100%;
   margin: 0 1rem;
 }
 
 .border {
-  border-radius: 7rem;
+  border-radius: 9rem;
   border: 3px solid $base;
   background: $background;
   backdrop-filter: blur(10px);

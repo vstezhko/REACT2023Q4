@@ -1,6 +1,10 @@
 .searchBlock {
   display: flex;
-  gap: 2rem;
+  gap: $header-gap-full;
+
+  @media (max-width: 800px) {
+    order: 5;
+  }
 
   .searchBlock__label {
     display: flex;
