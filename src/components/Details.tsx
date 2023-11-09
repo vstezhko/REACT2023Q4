@@ -66,6 +66,7 @@ const Details = () => {
       <button className="details__close" onClick={handleClose}>
         X
       </button>
+
       {isLoading ? <h3>loading...</h3> : null}
 
       {!isLoading && detailsData?.image ? (
