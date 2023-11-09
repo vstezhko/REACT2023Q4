@@ -16,16 +16,23 @@ interface Search {
 }
 
 interface SearchResultsResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results:
+  meta: {
+    pagination: {
+      current: number | null;
+      records: number | null;
+      last?: number | null;
+    };
+  };
+  data:
     | {
-        name: string;
-        gender: string;
-        hair_color: string;
-        birth_year: string;
-        url: string;
+        id: string;
+        attributes: {
+          name: string;
+          gender: string;
+        };
+        links: {
+          self: string;
+        };
       }[]
     | null;
 }
@@ -39,12 +46,15 @@ const MainInfo = () => {
   });
 
   const [searchResults, setSearchResults] = useState<SearchResultsResponse>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: null,
+    meta: {
+      pagination: {
+        current: null,
+        last: null,
+        records: null,
+      },
+    },
+    data: [],
   });
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -92,7 +102,7 @@ const MainInfo = () => {
       updateSearchResults(searchData.searchValue, searchData.page);
     }
 
-    if (searchResults.results && searchData.searchValue === null) {
+    if (searchResults.data && searchData.searchValue === null) {
       const lsSearchValue = localStorage.getItem('search');
       setSearchData({ ...searchData, searchValue: lsSearchValue || '' });
     }
@@ -123,9 +133,9 @@ const MainInfo = () => {
           <Loader />
         ) : (
           <>
-            <SearchResults results={searchResults.results} />
+            <SearchResults results={searchResults.data || []} />
             <Pagination
-              pageCount={Math.ceil(searchResults.count / 10 || 1)}
+              pageCount={searchResults.meta.pagination.last || searchData.page}
               currentPage={searchData.page}
               handlePageChange={handlePageChange}
             />

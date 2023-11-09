@@ -4,20 +4,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 interface PersonCardParams {
   name: string;
   gender: string;
-  hairColor: string;
-  birthYear: string;
-  url: string;
+  id: string;
+  image: string;
 }
 
-const PersonCard: FC<PersonCardParams> = ({
-  name,
-  gender,
-  hairColor,
-  birthYear,
-  url,
-}) => {
-  const parts = url.split('/');
-  const id = parts[parts.length - 2];
+const PersonCard: FC<PersonCardParams> = ({ name, gender, id, image }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -30,19 +21,20 @@ const PersonCard: FC<PersonCardParams> = ({
   };
 
   return (
-    <div className="card" onClick={handleClick}>
-      <h4>
-        <span>name:</span> {name}
-      </h4>
-      <p>
-        <span>gender:</span> {gender}
-      </p>
-      <p>
-        <span>hair color:</span> {hairColor}
-      </p>
-      <p>
-        <span>birth year:</span> {birthYear}
-      </p>
+    <div className="card searchResults__item" onClick={handleClick}>
+      <div className="card__info">
+        <h4>
+          <span>name:</span> {name}
+        </h4>
+        <p>
+          <span>gender:</span> {gender}
+        </p>
+      </div>
+      {image ? (
+        <div className="card__imageBlock">
+          <img src={image} alt="card image" />
+        </div>
+      ) : null}
     </div>
   );
 };

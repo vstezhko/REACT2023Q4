@@ -4,27 +4,30 @@ import PersonCard from './PersonCard';
 interface SearchResultsParams {
   results:
     | {
-        name: string;
-        gender: string;
-        hair_color: string;
-        birth_year: string;
-        url: string;
+        id: string;
+        attributes: {
+          name: string;
+          gender: string;
+          image: string;
+        };
+        links: {
+          self: string;
+        };
       }[]
     | null;
 }
 
 const SearchResults: FC<SearchResultsParams> = ({ results }) => {
   return (
-    <div className="searchResults">
+    <div className="searchResults border">
       {results && results.length
-        ? results.map((i, index) => (
+        ? results.map((i) => (
             <PersonCard
-              key={index}
-              name={i.name}
-              gender={i.gender}
-              hairColor={i.hair_color}
-              birthYear={i.birth_year}
-              url={i.url}
+              key={i.id}
+              name={i.attributes.name}
+              gender={i.attributes.gender}
+              image={i.attributes.image}
+              id={i.id}
             />
           ))
         : 'There are NO ITEMS'}

@@ -2,41 +2,46 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApiService } from '../api/Api.Service';
 
+interface Character {
+  data: {
+    attributes: {
+      name: string;
+      gender: string;
+      image: string;
+    };
+    id: string;
+  };
+}
+
 interface PeopleDetails {
-  name: string | null;
-  gender: string | null;
-  birth_year: string | null;
-  skin_color: string | null;
-  eye_color: string | null;
-  height: string | null;
+  name: string;
+  gender: string;
+  image: string;
 }
 
 const Details = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { id } = useParams();
-  const [detailsData, setDetailsData] = useState<PeopleDetails>({
-    name: null,
-    gender: null,
-    birth_year: null,
-    skin_color: null,
-    eye_color: null,
-    height: null,
-  });
+  const [detailsData, setDetailsData] = useState<PeopleDetails>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const getPerson = useCallback(
-    async (id: number) => {
+  const getCharacter = useCallback(
+    async (id: string) => {
       try {
         setIsLoading(true);
 
-        const results: PeopleDetails = await ApiService.getPerson(id);
+        const results: Character = await ApiService.getCharacter(id);
 
         if (results) {
-          setDetailsData(results);
+          setDetailsData({
+            name: results.data.attributes.name,
+            gender: results.data.attributes.gender,
+            image: results.data.attributes.image,
+          });
         }
       } catch (error) {
-        console.error(error);
+        console.warn(error);
       } finally {
         setIsLoading(false);
       }
@@ -46,7 +51,7 @@ const Details = () => {
 
   useEffect(() => {
     if (id) {
-      getPerson(+id);
+      getCharacter(id);
     }
   }, [id]);
 
@@ -57,34 +62,26 @@ const Details = () => {
   };
 
   return (
-    <div className="details">
-      <div className="details__close" onClick={handleClose}>
+    <div className="details border">
+      <button className="details__close" onClick={handleClose}>
         X
-      </div>
-      {isLoading ? (
-        <h3>loading...</h3>
-      ) : (
+      </button>
+      {isLoading ? <h3>loading...</h3> : null}
+
+      {!isLoading && detailsData?.image ? (
+        <div className="details__image">
+          <img src={detailsData.image} alt="character image" />
+        </div>
+      ) : null}
+
+      {!isLoading && detailsData ? (
         <>
-          <h4>
-            <span>name:</span> {detailsData.name}
-          </h4>
+          <h4>{detailsData.name}</h4>
           <p>
-            <span>gender:</span> {detailsData.gender}
-          </p>
-          <p>
-            <span>height:</span> {detailsData.height}
-          </p>
-          <p>
-            <span>birth year:</span> {detailsData.birth_year}
-          </p>
-          <p>
-            <span>skin color:</span> {detailsData.skin_color}
-          </p>
-          <p>
-            <span>eye color:</span> {detailsData.eye_color}
+            <span>gender:</span> {detailsData.gender || 'no data'}
           </p>
         </>
-      )}
+      ) : null}
     </div>
   );
 };

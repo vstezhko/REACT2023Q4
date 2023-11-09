@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 
 interface PaginationParams {
-  pageCount: number;
   handlePageChange: (newPage: number) => void;
-  currentPage?: number;
+  currentPage: number;
+  pageCount?: number;
 }
 
 const Pagination: FC<PaginationParams> = ({
-  pageCount,
   handlePageChange,
-  currentPage = 1,
+  currentPage,
+  pageCount = currentPage,
 }) => {
   const onChange = (page: number) => {
     if (page > 0 && page <= pageCount && page !== currentPage)
@@ -79,5 +79,4 @@ const Pagination: FC<PaginationParams> = ({
     </div>
   );
 };
-
 export default Pagination;
