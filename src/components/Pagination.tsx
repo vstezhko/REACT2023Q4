@@ -16,7 +16,7 @@ const Pagination: FC<PaginationParams> = ({
   const nextPage = currentPage + 1;
   const lastPage = pageCount;
   const onChange = (e: BaseSyntheticEvent) => {
-    const targetPage: number = e.currentTarget.dataset.page;
+    const targetPage: number = Number(e.currentTarget.dataset.page);
     const isTargetPageValid =
       targetPage > 0 && targetPage <= pageCount && targetPage !== currentPage;
 

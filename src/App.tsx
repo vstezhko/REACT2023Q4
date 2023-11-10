@@ -3,11 +3,16 @@ import Main from './pages/Main';
 import ErrorBoundary from './components/ErrorBoundary';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Details from './components/Details';
+import DataProvider from './components/DataProvider';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main />,
+    element: (
+      <DataProvider>
+        <Main />
+      </DataProvider>
+    ),
     children: [
       {
         path: 'details/:id',

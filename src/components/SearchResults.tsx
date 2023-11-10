@@ -2,19 +2,17 @@ import { FC } from 'react';
 import PersonCard from './PersonCard';
 
 interface SearchResultsParams {
-  results:
-    | {
-        id: string;
-        attributes: {
-          name: string;
-          gender: string;
-          image: string;
-        };
-        links: {
-          self: string;
-        };
-      }[]
-    | null;
+  results: {
+    id: string;
+    attributes: {
+      name: string;
+      gender: string;
+      image: string;
+    };
+    links: {
+      self: string;
+    };
+  }[];
 }
 
 const SearchResults: FC<SearchResultsParams> = ({ results }) => {

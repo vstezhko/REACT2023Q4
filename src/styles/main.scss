@@ -78,8 +78,23 @@ h4 {
 .mainInfo {
   display: flex;
   gap: 1rem;
+  align-items: center;
 
   .mainInfo__searchResults {
     width: 100%;
   }
+
+  .mainInfo__managePage {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+}
+
+.pageSize {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 0;
+  height: 2rem;
 }

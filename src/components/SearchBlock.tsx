@@ -1,55 +1,26 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, useContext, useState } from 'react';
 import Btn from './Btn';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
-interface SearchData {
-  searchValue: string | null;
-  page: number;
-}
+import { QueryContext } from './DataProvider';
 
 const SearchBlock = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [searchData, setSearchData] = useState<SearchData>({
-    searchValue: null,
-    page: 1,
-  });
-  const [searchValue, setSearchValue] = useState(searchData.searchValue || '');
+  const { query, setQuery } = useContext(QueryContext);
+  const [inputValue, setInputValue] = useState(query.searchValue);
 
-  useEffect(() => {
-    const searchURL = searchParams.get('search') || null;
-    const pageURL = searchParams.get('page') || 1;
-
-    const searchValFromLS = localStorage.getItem('search');
-    const searchVal = searchURL !== null ? searchURL : searchValFromLS || '';
-
-    setSearchData({
-      searchValue: searchVal,
-      page: +pageURL,
+  const handleSearchValue = () => {
+    setQuery((prevState) => {
+      return { ...prevState, searchValue: inputValue, page: 1 };
     });
-    setSearchValue(searchVal);
-    localStorage.setItem('search', searchVal.trim());
-    navigate(`?search=${searchVal}&page=${+pageURL}`);
-  }, [navigate, searchParams]);
-  const handleSearchValue = (newValue: string) => {
-    const startPage: number = 1;
-    setSearchData({ searchValue: newValue, page: startPage });
-    navigate(`?search=${newValue}&page=${startPage}`);
   };
 
   const handleInputChange = (e: BaseSyntheticEvent) => {
-    setSearchValue(e.target.value);
-    localStorage.setItem('search', e.target.value.trim());
+    const newValue = e.target.value.trim();
+    localStorage.setItem('search', newValue);
+    setInputValue(newValue);
   };
-
-  const handleSearch = () => {
-    handleSearchValue(searchValue.trim());
-  };
-
-  const handleClear = (e: BaseSyntheticEvent) => {
-    handleSearchValue('');
-    localStorage.setItem('search', '');
-    setSearchValue(e.target.value);
+  const handleClear = () => {
+    const newValue = '';
+    localStorage.setItem('search', newValue);
+    setInputValue(newValue);
   };
 
   return (
@@ -60,10 +31,10 @@ const SearchBlock = () => {
           type="text"
           id="search"
           onChange={handleInputChange}
-          value={searchValue}
+          value={inputValue}
         />
       </label>
-      <Btn onClick={handleSearch} title="SEARCH" />
+      <Btn onClick={handleSearchValue} title="SEARCH" />
       <Btn onClick={handleClear} title="CLEAR" />
     </div>
   );
