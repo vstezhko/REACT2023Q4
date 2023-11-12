@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import PersonCard from '../src/components/PersonCard';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import Details from '../src/components/Details';
 
 describe('cards', () => {
   it('Ensure that the card component renders the relevant card data', () => {
@@ -20,5 +21,31 @@ describe('cards', () => {
     expect(renderedGender).toBeInTheDocument();
     const renderedImage = queryByRole('img');
     expect(renderedImage).not.toBeInTheDocument();
+    cleanup();
+  });
+  it('Ensure that the card component renders the relevant card data', async () => {
+    const name = 'TestName';
+    const gender = 'TestGender';
+    const image = undefined;
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <Routes>
+          <Route
+            path={'/'}
+            element={
+              <PersonCard name={name} gender={gender} id={'id'} image={image} />
+            }
+          />
+          <Route path={'details/:id'} element={<Details />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const card = getByTestId('personCard');
+    fireEvent.click(card);
+    await waitFor(async () => {
+      const details = await getByTestId('details');
+      expect(details).toBeInTheDocument();
+    });
   });
 });
