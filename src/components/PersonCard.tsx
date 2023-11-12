@@ -21,7 +21,11 @@ const PersonCard: FC<PersonCardParams> = ({ name, gender, id, image }) => {
   };
 
   return (
-    <div className="card searchResults__item" onClick={handleClick}>
+    <div
+      className="card searchResults__item"
+      onClick={handleClick}
+      data-testid="personCard"
+    >
       <div className="card__info">
         <h4>
           <span>name:</span> {name}

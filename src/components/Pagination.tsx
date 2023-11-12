@@ -24,7 +24,8 @@ const Pagination: FC<PaginationParams> = ({
   };
 
   const checkPage = (page: number) => {
-    if (currentPage === page) return 'pagination__item_inactive';
+    if (currentPage === page) return ' pagination__item_inactive';
+    return '';
   };
 
   const checkStartPage = useMemo(() => {
@@ -36,69 +37,75 @@ const Pagination: FC<PaginationParams> = ({
   }, [currentPage, pageCount]);
 
   return (
-    <div className="pagination">
-      <div
+    <div className="pagination" data-testid="pagination">
+      <button
         className={`pagination__item ${checkStartPage}`}
         data-page={startPage}
         onClick={onChange}
+        data-testid="paginationBtn"
       >
         <img className="pagination__img start" src="/pag-2.svg" alt="start" />
-      </div>
-      <div
+      </button>
+      <button
         className={`pagination__item ${checkStartPage}`}
         data-page={prevPage}
         onClick={onChange}
+        data-testid="paginationBtn"
       >
         <img className="pagination__img prev" src="/pag-1.svg" alt="previous" />
-      </div>
+      </button>
 
       {currentPage !== 1 ? (
-        <div
+        <button
           className="pagination__item"
           data-page={prevPage}
           onClick={onChange}
+          data-testid="paginationBtn"
         >
           <p>{prevPage}</p>
-        </div>
+        </button>
       ) : null}
 
-      <div className="pagination__item pagination__item_active">
+      <button className="pagination__item pagination__item_active">
         <p>{currentPage}</p>
-      </div>
+      </button>
 
       {pageCount > 2 && currentPage < pageCount ? (
-        <div
+        <button
           className="pagination__item"
           data-page={nextPage}
           onClick={onChange}
+          data-testid="paginationBtn"
         >
           <p>{nextPage}</p>
-        </div>
+        </button>
       ) : null}
 
-      <div
+      <button
         className={`pagination__item ${checkLastPage}`}
         data-page={nextPage}
         onClick={onChange}
+        data-testid="paginationBtn"
       >
         <img
           className="pagination__img pagination__img_next"
           src="/pag-1.svg"
           alt="next"
         />
-      </div>
+      </button>
 
-      <div
-        className={`pagination__item ${checkLastPage}`}
+      <button
+        className={`pagination__item${checkLastPage}`}
         data-page={lastPage}
         onClick={onChange}
+        data-testid="paginationBtn"
       >
         <img
           className="pagination__img pagination__img_last"
           src="/pag-2.svg"
           alt="last"
         />
-      </div>
+      </button>
     </div>
   );
 };

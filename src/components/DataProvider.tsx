@@ -75,7 +75,10 @@ export const SearchResultContext = createContext<SearchResultParams>({
 
 const DataProvider = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
-  const [query, setQuery] = useState<QueryParams>(initialQuery);
+  const searchLS = localStorage.getItem('search');
+  const [query, setQuery] = useState<QueryParams>(
+    searchLS ? { ...initialQuery, searchValue: searchLS } : initialQuery
+  );
   const [searchResult, setSearchResult] =
     useState<SearchResultParams['searchResult']>(initialResult);
 
@@ -97,11 +100,6 @@ const DataProvider = ({ children }: { children: ReactElement }) => {
           isLoading: false,
           resultItems: results,
         });
-        // const searchURL = searchParams.get('search') || '';
-        // const pageURL = searchParams.get('page') || 1;
-        // if (searchData.page !== pageURL) {
-        //   navigate(`?search=${searchURL}&page=${searchData.page}`);
-        // }
       }
     } catch (error) {
       console.warn(error);

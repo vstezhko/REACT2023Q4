@@ -7,6 +7,7 @@ const SearchBlock = () => {
   const [inputValue, setInputValue] = useState(query.searchValue);
 
   const handleSearchValue = () => {
+    localStorage.setItem('search', inputValue);
     setQuery((prevState) => {
       return { ...prevState, searchValue: inputValue, page: 1 };
     });
@@ -14,7 +15,6 @@ const SearchBlock = () => {
 
   const handleInputChange = (e: BaseSyntheticEvent) => {
     const newValue = e.target.value.trim();
-    localStorage.setItem('search', newValue);
     setInputValue(newValue);
   };
   const handleClear = () => {
@@ -32,6 +32,7 @@ const SearchBlock = () => {
           id="search"
           onChange={handleInputChange}
           value={inputValue}
+          placeholder="Search by name"
         />
       </label>
       <Btn onClick={handleSearchValue} title="SEARCH" />
