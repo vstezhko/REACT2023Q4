@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import PersonCard from '../src/components/PersonCard';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -46,6 +46,31 @@ describe('cards', () => {
     await waitFor(async () => {
       const details = await getByTestId('details');
       expect(details).toBeInTheDocument();
+    });
+  });
+  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+    const spy = vi.spyOn(global, 'fetch');
+    const name = 'TestName';
+    const gender = 'TestGender';
+    const image = undefined;
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <Routes>
+          <Route
+            path={'/'}
+            element={
+              <PersonCard name={name} gender={gender} id={'id'} image={image} />
+            }
+          />
+          <Route path={'details/:id'} element={<Details />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const card = getByTestId('personCard');
+    fireEvent.click(card);
+    await waitFor(async () => {
+      expect(spy).toHaveBeenCalled();
     });
   });
 });
