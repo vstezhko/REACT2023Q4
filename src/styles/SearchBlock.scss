@@ -1,0 +1,40 @@
+.searchBlock {
+  display: flex;
+  gap: $header-gap-full;
+
+  @media (max-width: 800px) {
+    order: 5;
+  }
+
+  .searchBlock__label {
+    display: flex;
+    padding: 1.4rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 3rem;
+    border: 2px solid $base;
+    width: 22rem;
+    transition: all 0.3s ease-in;
+
+    &:focus-within {
+      border: 2px solid $light;
+      background: $background;
+    }
+  }
+
+  .searchBlock__label input {
+    background: none;
+    border: none;
+    width: 100%;
+    color: $light;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .searchBlock__img {
+    height: 2.1rem;
+  }
+}

@@ -1,0 +1,10 @@
+.searchResults {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 3rem;
+
+  .searchResults__item {
+    flex: 1 1 calc(33.3% - 2rem);
+  }
+}

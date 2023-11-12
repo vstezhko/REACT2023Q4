@@ -1,0 +1,45 @@
+export const characterMock = {
+  data: {
+    id: '309c1379-8579-4401-916e-bc6a17b2b39f',
+    type: 'character',
+    attributes: {
+      slug: 'abernathy',
+      alias_names: [],
+      animagus: null,
+      blood_status: null,
+      boggart: null,
+      born: 'Before 1909 (likely)',
+      died: null,
+      eye_color: null,
+      family_members: [],
+      gender: 'Male',
+      hair_color: null,
+      height: null,
+      house: null,
+      image:
+        'https://static.wikia.nocookie.net/harrypotter/images/a/a6/Abernathy_COG.png',
+      jobs: ['Supervisor for the Wand Permit Office (formerly)'],
+      marital_status: null,
+      name: 'Abernathy',
+      nationality: 'American',
+      patronus: null,
+      romances: [],
+      skin_color: null,
+      species: 'Human',
+      titles: [],
+      wands: ['Unknown length, wood and core (formerly)'],
+      weight: null,
+      wiki: 'https://harrypotter.fandom.com/wiki/Abernathy',
+    },
+    links: {
+      self: '/v1/characters/309c1379-8579-4401-916e-bc6a17b2b39f',
+    },
+  },
+  meta: {
+    copyright: 'Copyright © Potter DB 2023',
+    generated_at: '2023-11-12T20:32:43.735+00:00',
+  },
+  links: {
+    self: 'https://api.potterdb.com/v1/characters/309c1379-8579-4401-916e-bc6a17b2b39f',
+  },
+};

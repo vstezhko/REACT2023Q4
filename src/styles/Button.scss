@@ -1,0 +1,46 @@
+.btn {
+  white-space: nowrap;
+  display: flex;
+  padding: 1.4rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  border-radius: 2.4rem;
+  border: 2px solid $base;
+  background: $base;
+
+  text-align: center;
+  color: $light;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2rem;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $base-dark;
+    border: 2px solid $base-dark;
+  }
+
+  &:active {
+    background: $base-bright;
+    border: 2px solid $base-bright;
+  }
+
+  &_error {
+    border: 2px solid $error;
+    background: $error;
+
+    &:hover {
+      border: 2px solid $error-dark;
+      background: $error-dark;
+    }
+
+    &:active {
+      border: 2px solid $error-bright;
+      background: $error-bright;
+    }
+  }
+}
