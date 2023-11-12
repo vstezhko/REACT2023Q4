@@ -1,8 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Details from '../src/components/Details';
 import { characterMock } from './mock/characterMock';
+import App from '../src/App';
 
 vi.mock('../api/Api.Service', () => {
   return {
@@ -48,5 +49,19 @@ describe('Details Component', () => {
     );
     const nameLabel = await findByText(characterMock.data.attributes.name);
     expect(nameLabel).toBeInTheDocument();
+  });
+
+  it('Ensure that clicking the close button hides the component', async () => {
+    const { findByTestId, queryByTestId } = render(
+      <MemoryRouter initialEntries={['/details/asdf']}>
+        <App />
+      </MemoryRouter>
+    );
+    const detailsBeforeClose = await queryByTestId('details');
+    expect(detailsBeforeClose).toBeInTheDocument();
+    const close = await findByTestId('close');
+    fireEvent.click(close);
+    const detailsAfterClose = await queryByTestId('details');
+    expect(detailsAfterClose).not.toBeInTheDocument();
   });
 });

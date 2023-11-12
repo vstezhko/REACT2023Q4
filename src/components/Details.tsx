@@ -54,7 +54,6 @@ const Details = () => {
       getCharacter(id);
     }
   }, [id]);
-
   const handleClose = () => {
     navigate(
       `/?search=${searchParams.get('search')}&page=${searchParams.get('page')}`
@@ -62,8 +61,12 @@ const Details = () => {
   };
 
   return (
-    <div className="details border">
-      <button className="details__close" onClick={handleClose}>
+    <div className="details border" data-testid="details">
+      <button
+        className="details__close"
+        onClick={handleClose}
+        data-testid="close"
+      >
         X
       </button>
 
