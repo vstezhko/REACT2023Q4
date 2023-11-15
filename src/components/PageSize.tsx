@@ -1,15 +1,15 @@
-import React, { BaseSyntheticEvent, useContext, useState } from 'react';
-import { QueryContext } from './DataProvider';
+import React, { BaseSyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from '../../redux/store';
+import { querySlice } from '../../redux/slices/querySlice/querySlice';
 
 const PageSize = () => {
-  const { query, setQuery } = useContext(QueryContext);
-  const [value, setValue] = useState(query.pageSize);
+  const { pageSize } = useSelector((state) => state.query);
+  const dispatch = useDispatch();
+  const [value, setValue] = useState(pageSize);
 
   function changeSelect(e: BaseSyntheticEvent) {
     setValue(e.target.value);
-    setQuery((prevState) => {
-      return { ...prevState, pageSize: e.target.value, page: 1 };
-    });
+    dispatch(querySlice.actions.setPageSize(e.target.value));
   }
 
   return (

@@ -2,18 +2,19 @@ import React, { useContext, useMemo } from 'react';
 import Loader from './Loader';
 import SearchResults from './SearchResults';
 import { Outlet } from 'react-router-dom';
-import { QueryContext, SearchResultContext } from './DataProvider';
+import { SearchResultContext } from './DataProvider';
 import Pagination from './Pagination';
 import PageSize from './PageSize';
+import { useDispatch, useSelector } from '../../redux/store';
+import { querySlice } from '../../redux/slices/querySlice/querySlice';
 
 const MainInfo = () => {
   const { searchResult } = useContext(SearchResultContext);
-  const { query, setQuery } = useContext(QueryContext);
+  const { page } = useSelector((state) => state.query);
+  const dispatch = useDispatch();
 
   const handlePageChange = (targetPage: number) => {
-    setQuery((prevState) => {
-      return { ...prevState, page: targetPage };
-    });
+    dispatch(querySlice.actions.setPage(targetPage));
   };
 
   const pageCountFromResponse = useMemo(
@@ -35,8 +36,8 @@ const MainInfo = () => {
               <div className="mainInfo__managePage">
                 <PageSize />
                 <Pagination
-                  pageCount={pageCountFromResponse || query.page}
-                  currentPage={query.page}
+                  pageCount={pageCountFromResponse || page}
+                  currentPage={page}
                   handlePageChange={handlePageChange}
                 />
               </div>

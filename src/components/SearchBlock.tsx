@@ -1,16 +1,20 @@
-import React, { BaseSyntheticEvent, useContext, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import Btn from './Btn';
-import { QueryContext } from './DataProvider';
+import { useDispatch, useSelector } from '../../redux/store';
+import { querySlice } from '../../redux/slices/querySlice/querySlice';
 
 const SearchBlock = () => {
-  const { query, setQuery } = useContext(QueryContext);
-  const [inputValue, setInputValue] = useState(query.searchValue);
+  const { searchValue } = useSelector((state) => state.query);
+  const dispatch = useDispatch();
+  const [inputValue, setInputValue] = useState(searchValue);
+
+  useEffect(() => {
+    setInputValue(searchValue);
+  }, [searchValue]);
 
   const handleSearchValue = () => {
     localStorage.setItem('search', inputValue);
-    setQuery((prevState) => {
-      return { ...prevState, searchValue: inputValue, page: 1 };
-    });
+    dispatch(querySlice.actions.setNewSearchValue(inputValue));
   };
 
   const handleInputChange = (e: BaseSyntheticEvent) => {

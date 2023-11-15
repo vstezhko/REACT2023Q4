@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Details from '../src/components/Details';
 import { characterMock } from './mock/characterMock';
 import App from '../src/App';
+import { AppProvider } from '../src/components/AppProvider';
 
 vi.mock('../api/Api.Service', () => {
   return {
@@ -54,7 +55,9 @@ describe('Details Component', () => {
   it('Ensure that clicking the close button hides the component', async () => {
     const { findByTestId, queryByTestId } = render(
       <MemoryRouter initialEntries={['/details/asdf']}>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </MemoryRouter>
     );
     const detailsBeforeClose = await queryByTestId('details');

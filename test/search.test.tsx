@@ -9,10 +9,15 @@ import {
 import SearchBlock from '../src/components/SearchBlock';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../src/App';
+import { AppProvider } from '../src/components/AppProvider';
 
 describe('search tests', () => {
   it('Verify that clicking the Search button saves the entered value to the local storage', async () => {
-    render(<SearchBlock />);
+    render(
+      <AppProvider>
+        <SearchBlock />
+      </AppProvider>
+    );
 
     const searchInput = screen.getByPlaceholderText('Search by name');
     const searchButton = screen.getByText('SEARCH');
@@ -32,7 +37,9 @@ describe('search tests', () => {
     localStorage.setItem('search', exampleSearchValue);
     render(
       <MemoryRouter>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </MemoryRouter>
     );
 

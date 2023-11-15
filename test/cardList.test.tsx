@@ -1,12 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  QueryContext,
-  SearchResultContext,
-} from '../src/components/DataProvider';
+import { SearchResultContext } from '../src/components/DataProvider';
 import Main from '../src/pages/Main';
 import { ApiService } from '../src/api/Api.Service';
+import { AppProvider } from '../src/components/AppProvider';
 
 describe('Test cards', () => {
   it('Verify that the component renders the specified number of cards', async () => {
@@ -15,8 +13,6 @@ describe('Test cards', () => {
       page: 1,
       pageSize: 10,
     };
-
-    const setQuery = vi.fn();
     const setSearchResult = vi.fn();
     const searchResponse = await ApiService.search(query);
     const searchResult = {
@@ -27,13 +23,13 @@ describe('Test cards', () => {
 
     render(
       <MemoryRouter>
-        <QueryContext.Provider value={{ query, setQuery }}>
+        <AppProvider>
           <SearchResultContext.Provider
             value={{ searchResult, setSearchResult }}
           >
             <Main />
           </SearchResultContext.Provider>
-        </QueryContext.Provider>
+        </AppProvider>
       </MemoryRouter>
     );
 
@@ -59,9 +55,13 @@ describe('Test cards', () => {
 
     render(
       <MemoryRouter>
-        <SearchResultContext.Provider value={{ searchResult, setSearchResult }}>
-          <Main />
-        </SearchResultContext.Provider>
+        <AppProvider>
+          <SearchResultContext.Provider
+            value={{ searchResult, setSearchResult }}
+          >
+            <Main />
+          </SearchResultContext.Provider>
+        </AppProvider>
       </MemoryRouter>
     );
 

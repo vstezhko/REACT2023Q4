@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { ApiService } from '../api/Api.Service';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from '../../redux/store';
+import { querySlice } from '../../redux/slices/querySlice/querySlice';
 
 interface QueryParams {
   searchValue: string;
@@ -75,12 +77,15 @@ export const SearchResultContext = createContext<SearchResultParams>({
 
 const DataProvider = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
-  const searchLS = localStorage.getItem('search');
-  const [query, setQuery] = useState<QueryParams>(
-    searchLS ? { ...initialQuery, searchValue: searchLS } : initialQuery
-  );
+  const dispatch = useDispatch();
+  const query = useSelector((state) => state.query);
   const [searchResult, setSearchResult] =
     useState<SearchResultParams['searchResult']>(initialResult);
+
+  useEffect(() => {
+    const searchLS = localStorage.getItem('search');
+    searchLS && dispatch(querySlice.actions.setNewSearchValue(searchLS));
+  }, []);
 
   const updateSearchResults = async () => {
     try {
@@ -119,11 +124,9 @@ const DataProvider = ({ children }: { children: ReactElement }) => {
   }, [query]);
 
   return (
-    <QueryContext.Provider value={{ query, setQuery }}>
-      <SearchResultContext.Provider value={{ searchResult, setSearchResult }}>
-        {children}
-      </SearchResultContext.Provider>
-    </QueryContext.Provider>
+    <SearchResultContext.Provider value={{ searchResult, setSearchResult }}>
+      {children}
+    </SearchResultContext.Provider>
   );
 };
 
