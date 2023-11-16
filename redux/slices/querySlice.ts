@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface QueryParams {
+export interface QueryParams {
   searchValue: string;
   page: number;
   pageSize: number;

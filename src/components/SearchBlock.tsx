@@ -1,7 +1,7 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import Btn from './Btn';
 import { useDispatch, useSelector } from '../../redux/store';
-import { querySlice } from '../../redux/slices/querySlice/querySlice';
+import { querySlice } from '../../redux/slices/querySlice';
 
 const SearchBlock = () => {
   const { searchValue } = useSelector((state) => state.query);

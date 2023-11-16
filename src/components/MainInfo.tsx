@@ -1,43 +1,43 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Loader from './Loader';
 import SearchResults from './SearchResults';
 import { Outlet } from 'react-router-dom';
-import { SearchResultContext } from './DataProvider';
 import Pagination from './Pagination';
 import PageSize from './PageSize';
 import { useDispatch, useSelector } from '../../redux/store';
-import { querySlice } from '../../redux/slices/querySlice/querySlice';
+import { querySlice } from '../../redux/slices/querySlice';
+import { useSearchByNameQuery } from '../../redux/hpApi';
 
 const MainInfo = () => {
-  const { searchResult } = useContext(SearchResultContext);
-  const { page } = useSelector((state) => state.query);
+  const query = useSelector((state) => state.query);
   const dispatch = useDispatch();
+  const { data, error, isFetching } = useSearchByNameQuery(query);
 
   const handlePageChange = (targetPage: number) => {
     dispatch(querySlice.actions.setPage(targetPage));
   };
 
   const pageCountFromResponse = useMemo(
-    () => Number(searchResult.resultItems?.meta.pagination.last),
-    [searchResult]
+    () => Number(data?.meta.pagination.last),
+    [data]
   );
 
   return (
     <main className="mainInfo">
       <div className="mainInfo__searchResults">
-        {searchResult.isLoading ? (
+        {isFetching ? (
           <Loader />
-        ) : searchResult.isError ? (
+        ) : error ? (
           <div>try one more time</div>
         ) : (
           <>
-            <SearchResults results={searchResult.resultItems?.data || []} />
-            {searchResult.resultItems ? (
+            <SearchResults results={data?.data || []} />
+            {data?.data ? (
               <div className="mainInfo__managePage">
                 <PageSize />
                 <Pagination
-                  pageCount={pageCountFromResponse || page}
-                  currentPage={page}
+                  pageCount={pageCountFromResponse || query.page}
+                  currentPage={query.page}
                   handlePageChange={handlePageChange}
                 />
               </div>

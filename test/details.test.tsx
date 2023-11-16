@@ -34,7 +34,9 @@ describe('Details Component', () => {
   it('displays loading indicator while fetching data', async () => {
     const { getByText } = render(
       <MemoryRouter initialEntries={[`/details/${id}`]}>
-        <Details />
+        <AppProvider>
+          <Details />
+        </AppProvider>
       </MemoryRouter>
     );
     const loading = await getByText('loading...');
@@ -45,7 +47,9 @@ describe('Details Component', () => {
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
     const { findByText } = render(
       <MemoryRouter initialEntries={[`/details/${id}`]}>
-        <Details />
+        <AppProvider>
+          <Details />
+        </AppProvider>
       </MemoryRouter>
     );
     const nameLabel = await findByText(characterMock.data.attributes.name);

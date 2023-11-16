@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { useDispatch, useSelector } from '../../redux/store';
-import { querySlice } from '../../redux/slices/querySlice/querySlice';
+import { querySlice } from '../../redux/slices/querySlice';
 
 const PageSize = () => {
   const { pageSize } = useSelector((state) => state.query);

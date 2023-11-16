@@ -3,7 +3,6 @@ import Main from './pages/Main';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Route, Routes } from 'react-router-dom';
 import Details from './components/Details';
-import DataProvider from './components/DataProvider';
 import NotFound from './pages/NotFound';
 
 const App = () => {
@@ -13,14 +12,7 @@ const App = () => {
         fallback={<p className="fallback">Something went wrong</p>}
       >
         <Routes>
-          <Route
-            path={'/'}
-            element={
-              <DataProvider>
-                <Main />
-              </DataProvider>
-            }
-          >
+          <Route path={'/'} element={<Main />}>
             <Route path={'details/:id'} element={<Details />} />
           </Route>
           <Route path={'*'} element={<NotFound />} />

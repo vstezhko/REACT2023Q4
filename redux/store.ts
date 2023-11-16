@@ -5,9 +5,12 @@ import {
   useDispatch as useReduxDispatch,
   type TypedUseSelectorHook,
 } from 'react-redux';
+import { hpApi } from './hpApi';
 
 export const reduxStore = configureStore({
   reducer: reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(hpApi.middleware),
 });
 
 export const useDispatch = () => useReduxDispatch<AppDispatch>();

@@ -1,6 +1,5 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { test, expect, describe } from 'vitest';
-import DataProvider from '../src/components/DataProvider';
 import Main from '../src/pages/Main';
 import { MemoryRouter } from 'react-router-dom';
 import { AppProvider } from '../src/components/AppProvider';
@@ -10,9 +9,7 @@ describe('pagination tests', () => {
     render(
       <MemoryRouter>
         <AppProvider>
-          <DataProvider>
-            <Main />
-          </DataProvider>
+          <Main />
         </AppProvider>
       </MemoryRouter>
     );

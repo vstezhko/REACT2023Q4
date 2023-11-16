@@ -1,21 +1,8 @@
-import { FC } from 'react';
 import PersonCard from './PersonCard';
+import { Character } from '../../redux/hpApi';
 
-interface SearchResultsParams {
-  results: {
-    id: string;
-    attributes: {
-      name: string;
-      gender: string;
-      image: string;
-    };
-    links: {
-      self: string;
-    };
-  }[];
-}
-
-const SearchResults: FC<SearchResultsParams> = ({ results }) => {
+const SearchResults = ({ results }: { results: Character[] }) => {
+  console.log(results);
   return (
     <div className="searchResults border">
       {results && results.length
@@ -23,8 +10,8 @@ const SearchResults: FC<SearchResultsParams> = ({ results }) => {
             <PersonCard
               key={i.id}
               name={i.attributes.name}
-              gender={i.attributes.gender}
-              image={i.attributes.image}
+              gender={i.attributes.gender || ''}
+              image={i.attributes.image || ''}
               id={i.id}
             />
           ))

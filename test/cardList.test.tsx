@@ -1,10 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { SearchResultContext } from '../src/components/DataProvider';
 import Main from '../src/pages/Main';
-import { ApiService } from '../src/api/Api.Service';
 import { AppProvider } from '../src/components/AppProvider';
+import SearchResults from '../src/components/SearchResults';
 
 describe('Test cards', () => {
   it('Verify that the component renders the specified number of cards', async () => {
@@ -13,22 +12,11 @@ describe('Test cards', () => {
       page: 1,
       pageSize: 10,
     };
-    const setSearchResult = vi.fn();
-    const searchResponse = await ApiService.search(query);
-    const searchResult = {
-      isLoading: false,
-      isError: false,
-      resultItems: searchResponse,
-    };
 
     render(
       <MemoryRouter>
         <AppProvider>
-          <SearchResultContext.Provider
-            value={{ searchResult, setSearchResult }}
-          >
-            <Main />
-          </SearchResultContext.Provider>
+          <Main />
         </AppProvider>
       </MemoryRouter>
     );
@@ -38,34 +26,12 @@ describe('Test cards', () => {
   });
 
   it('Check that an appropriate message is displayed if no cards are present', async () => {
-    const setSearchResult = vi.fn();
-    const searchResult = {
-      isLoading: false,
-      isError: false,
-      resultItems: {
-        data: [],
-        meta: {
-          pagination: {
-            current: 1,
-            records: 0,
-          },
-        },
-      },
-    };
+    const emptyResults = [];
 
-    render(
-      <MemoryRouter>
-        <AppProvider>
-          <SearchResultContext.Provider
-            value={{ searchResult, setSearchResult }}
-          >
-            <Main />
-          </SearchResultContext.Provider>
-        </AppProvider>
-      </MemoryRouter>
-    );
+    render(<SearchResults results={emptyResults} />);
 
-    const cardsOnScreen = await screen.findByText('There are NO ITEMS');
-    expect(cardsOnScreen).toBeInTheDocument();
+    const noItemsMessage = screen.getByText('There are NO ITEMS');
+
+    expect(noItemsMessage).toBeInTheDocument();
   });
 });
