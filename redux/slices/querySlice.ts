@@ -6,7 +6,7 @@ export interface QueryParams {
   pageSize: number;
 }
 
-const initialState: QueryParams = {
+export const initialState: QueryParams = {
   searchValue: '',
   page: 1,
   pageSize: 10,
