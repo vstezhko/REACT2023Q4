@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useGetCharacterQuery } from '../../redux/hpApi';
+import { loadingSlice } from '../../redux/slices/loadingSlice';
+import { useDispatch } from '../../redux/store';
 
 const Details = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const { data, error, isFetching } = useGetCharacterQuery(id as string);
 
+  useEffect(() => {
+    dispatch(loadingSlice.actions.setCharacterLoading(isFetching));
+  }, [isFetching]);
   const handleClose = () => {
     navigate(
       `/?search=${searchParams.get('search')}&page=${searchParams.get('page')}`
