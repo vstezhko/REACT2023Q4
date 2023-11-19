@@ -9,7 +9,7 @@ test('Check that clicking triggers an additional API call to fetch detailed info
   const props = {
     name: 'John Doe',
     gender: 'Male',
-    id: '42d8662b-24a2-434b-8394-945ff0daa194',
+    id: '309c1379-8579-4401-916e-bc6a17b2b39f',
     image: undefined,
   };
 

@@ -1,36 +1,33 @@
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import Main from '../src/pages/Main';
-import { AppProvider } from '../src/components/AppProvider';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from '@testing-library/react';
 import SearchResults from '../src/components/SearchResults';
+import { clearSearchResponseMock } from './mocks/responses/clearSearchResponseMock';
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+    useSearchParams: () => [new URLSearchParams('search=&page=1')],
+  };
+});
 
 describe('Test cards', () => {
   it('Verify that the component renders the specified number of cards', async () => {
-    const query = {
-      searchValue: '',
-      page: 1,
-      pageSize: 10,
-    };
-
-    render(
-      <MemoryRouter>
-        <AppProvider>
-          <Main />
-        </AppProvider>
-      </MemoryRouter>
+    const { getAllByTestId } = render(
+      <SearchResults results={clearSearchResponseMock?.data || []} />
     );
 
-    const cardsOnScreen = await screen.findAllByTestId('personCard');
-    expect(cardsOnScreen.length).toBe(query.pageSize);
+    const cardsOnScreen = getAllByTestId('personCard');
+    expect(cardsOnScreen.length).toBe(clearSearchResponseMock?.data.length);
   });
 
   it('Check that an appropriate message is displayed if no cards are present', async () => {
     const emptyResults = [];
 
-    render(<SearchResults results={emptyResults} />);
+    const { getByText } = render(<SearchResults results={emptyResults} />);
 
-    const noItemsMessage = screen.getByText('There are NO ITEMS');
+    const noItemsMessage = getByText('There are NO ITEMS');
 
     expect(noItemsMessage).toBeInTheDocument();
   });

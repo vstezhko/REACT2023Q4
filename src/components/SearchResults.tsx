@@ -2,17 +2,16 @@ import PersonCard from './PersonCard';
 import { Character } from '../../redux/hpApi';
 
 const SearchResults = ({ results }: { results: Character[] }) => {
-  console.log(results);
   return (
     <div className="searchResults border">
-      {results && results.length
-        ? results.map((i) => (
+      {results?.length
+        ? results.map(({ id, attributes }) => (
             <PersonCard
-              key={i.id}
-              name={i.attributes.name}
-              gender={i.attributes.gender || ''}
-              image={i.attributes.image || ''}
-              id={i.id}
+              key={id}
+              name={attributes.name}
+              gender={attributes.gender || ''}
+              image={attributes.image || ''}
+              id={id}
             />
           ))
         : 'There are NO ITEMS'}
