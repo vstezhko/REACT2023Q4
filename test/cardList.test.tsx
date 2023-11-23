@@ -15,11 +15,11 @@ vi.mock('react-router-dom', async () => {
 describe('Test cards', () => {
   it('Verify that the component renders the specified number of cards', async () => {
     const { getAllByTestId } = render(
-      <SearchResults results={clearSearchResponseMock?.data || []} />
+      <SearchResults results={clearSearchResponseMock.data} />
     );
 
     const cardsOnScreen = getAllByTestId('personCard');
-    expect(cardsOnScreen.length).toBe(clearSearchResponseMock?.data.length);
+    expect(cardsOnScreen.length).toBe(clearSearchResponseMock.data.length);
   });
 
   it('Check that an appropriate message is displayed if no cards are present', async () => {

@@ -7,10 +7,10 @@ import { useDispatch } from '../../redux/store';
 const Details = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const dispatch = useDispatch();
 
-  const { data, error, isFetching } = useGetCharacterQuery(id as string);
+  const { data, error, isFetching } = useGetCharacterQuery(id);
 
   useEffect(() => {
     dispatch(loadingSlice.actions.setCharacterLoading(isFetching));
