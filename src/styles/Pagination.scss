@@ -24,6 +24,11 @@
       background: $base;
     }
 
+    &:hover {
+      cursor: pointer;
+      background: $background;
+    }
+
     &_inactive {
       cursor: none;
       border: 2px solid #051836;
@@ -36,11 +41,6 @@
         cursor: inherit;
         background: inherit;
       }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background: $background;
     }
   }
 

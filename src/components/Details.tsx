@@ -1,64 +1,29 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ApiService } from '../api/Api.Service';
-
-interface Character {
-  data: {
-    attributes: {
-      name: string;
-      gender: string;
-      image: string;
-    };
-    id: string;
-  };
-}
-
-interface PeopleDetails {
-  name: string;
-  gender: string;
-  image: string;
-}
+import { useGetCharacterQuery } from '../../redux/hpApi';
+import { loadingSlice } from '../../redux/slices/loadingSlice';
+import { useDispatch } from '../../redux/store';
 
 const Details = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { id } = useParams();
-  const [detailsData, setDetailsData] = useState<PeopleDetails>();
-  const [isLoading, setIsLoading] = useState(false);
+  const { id = '' } = useParams();
+  const dispatch = useDispatch();
 
-  const getCharacter = useCallback(
-    async (id: string) => {
-      try {
-        setIsLoading(true);
-
-        const results: Character = await ApiService.getCharacter(id);
-
-        if (results) {
-          setDetailsData({
-            name: results.data.attributes.name,
-            gender: results.data.attributes.gender,
-            image: results.data.attributes.image,
-          });
-        }
-      } catch (error) {
-        console.warn(error);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [setIsLoading]
-  );
+  const { data, error, isFetching } = useGetCharacterQuery(id);
 
   useEffect(() => {
-    if (id) {
-      getCharacter(id);
-    }
-  }, [id]);
+    dispatch(loadingSlice.actions.setCharacterLoading(isFetching));
+  }, [isFetching]);
   const handleClose = () => {
     navigate(
       `/?search=${searchParams.get('search')}&page=${searchParams.get('page')}`
     );
   };
+
+  if (error) {
+    console.warn(error);
+  }
 
   return (
     <div className="details border" data-testid="details">
@@ -70,19 +35,21 @@ const Details = () => {
         X
       </button>
 
-      {isLoading ? <h3>loading...</h3> : null}
+      {error ? <h3>sorry, the error occurs</h3> : null}
 
-      {!isLoading && detailsData?.image ? (
+      {isFetching ? <h3>loading...</h3> : null}
+
+      {!isFetching && data?.data.attributes.image ? (
         <div className="details__image">
-          <img src={detailsData.image} alt="character image" />
+          <img src={data.data.attributes.image} alt="character image" />
         </div>
       ) : null}
 
-      {!isLoading && detailsData ? (
+      {!isFetching && data ? (
         <>
-          <h4>{detailsData.name}</h4>
+          <h4>{data.data.attributes.name}</h4>
           <p>
-            <span>gender:</span> {detailsData.gender || 'no data'}
+            <span>gender:</span> {data.data.attributes.gender || 'no data'}
           </p>
         </>
       ) : null}

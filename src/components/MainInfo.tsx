@@ -1,37 +1,43 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Loader from './Loader';
 import SearchResults from './SearchResults';
 import { Outlet } from 'react-router-dom';
-import { QueryContext, SearchResultContext } from './DataProvider';
 import Pagination from './Pagination';
 import PageSize from './PageSize';
+import { useDispatch, useSelector } from '../../redux/store';
+import { querySlice } from '../../redux/slices/querySlice';
+import { useSearchByNameQuery } from '../../redux/hpApi';
+import { loadingSlice } from '../../redux/slices/loadingSlice';
 
 const MainInfo = () => {
-  const { searchResult } = useContext(SearchResultContext);
-  const { query, setQuery } = useContext(QueryContext);
+  const query = useSelector((state) => state.query);
+  const dispatch = useDispatch();
+  const { data, error, isFetching } = useSearchByNameQuery(query);
+
+  useEffect(() => {
+    dispatch(loadingSlice.actions.setSearchLoading(isFetching));
+  }, [isFetching]);
 
   const handlePageChange = (targetPage: number) => {
-    setQuery((prevState) => {
-      return { ...prevState, page: targetPage };
-    });
+    dispatch(querySlice.actions.setPage(targetPage));
   };
 
   const pageCountFromResponse = useMemo(
-    () => Number(searchResult.resultItems?.meta.pagination.last),
-    [searchResult]
+    () => Number(data?.meta.pagination.last),
+    [data]
   );
 
   return (
     <main className="mainInfo">
       <div className="mainInfo__searchResults">
-        {searchResult.isLoading ? (
+        {isFetching ? (
           <Loader />
-        ) : searchResult.isError ? (
+        ) : error ? (
           <div>try one more time</div>
         ) : (
           <>
-            <SearchResults results={searchResult.resultItems?.data || []} />
-            {searchResult.resultItems ? (
+            <SearchResults results={data?.data || []} />
+            {data?.data ? (
               <div className="mainInfo__managePage">
                 <PageSize />
                 <Pagination
