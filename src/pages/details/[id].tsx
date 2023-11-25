@@ -1,0 +1,101 @@
+import { wrapper } from '@/redux/store';
+import { useRouter } from 'next/router';
+import React from 'react';
+import {
+  getCharacter,
+  getRunningQueriesThunk,
+  searchByName,
+} from '@/redux/hpApi';
+import SearchResults from '@/components/SearchResults';
+import Pagination from '@/components/Pagination';
+import PageSize from '@/components/PageSize';
+import { querySlice } from '@/redux/slices/querySlice';
+import { useManagePage } from '@/hooks/useManagePage';
+import Details from '@/components/Details';
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const id = context.params?.id;
+    const storeQuery = store.getState().query;
+    const contextQuery = context.query;
+    const query = { ...storeQuery, ...contextQuery };
+
+    if (query) {
+      store.dispatch(querySlice.actions.setQuery(query));
+      await store.dispatch(searchByName.initiate(query));
+    }
+
+    if (id && !Array.isArray(id)) {
+      console.log(id);
+      await store.dispatch(getCharacter.initiate(id));
+    }
+
+    await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+    return {
+      props: {
+        query: query,
+        searchResponse: store.getState().hpApi.queries,
+      },
+    };
+  }
+);
+
+export default function Home({ query, searchResponse }) {
+  const router = useRouter();
+  const characterKey = 'getCharacter';
+  const searchByNameKey = 'searchByName';
+  const dataKey = Object.keys(searchResponse).find((key) =>
+    key.startsWith(searchByNameKey)
+  );
+  let data;
+  if (dataKey) data = searchResponse[dataKey];
+
+  const detailsDataKey = Object.keys(searchResponse).find((key) =>
+    key.startsWith(characterKey)
+  );
+
+  let detailsData;
+  if (detailsDataKey) detailsData = searchResponse[detailsDataKey];
+
+  const { handlePageChange, handlePageSizeChange } = useManagePage(
+    router,
+    query
+  );
+
+  const handleClose = () => {
+    router.push(
+      `/?searchValue=${query.searchValue.trim()}&page=${Number(
+        query.page
+      )}&pageSize=${Number(query.pageSize)}`
+    );
+  };
+
+  return (
+    <>
+      <main className="mainInfo">
+        <div className="mainInfo__searchResults">
+          <SearchResults results={data?.data.data || []} />
+          {data?.data.data ? (
+            <div className="mainInfo__managePage">
+              <PageSize
+                pageSize={Number(query.pageSize)}
+                handlePageSizeChange={handlePageSizeChange}
+              />
+              <Pagination
+                pageCount={
+                  Number(data?.data.meta.pagination.last) || Number(query.page)
+                }
+                currentPage={Number(query.page)}
+                handlePageChange={handlePageChange}
+              />
+            </div>
+          ) : null}
+        </div>
+        {detailsData ? (
+          <Details detailsData={detailsData.data} handleClose={handleClose} />
+        ) : null}
+      </main>
+    </>
+  );
+}

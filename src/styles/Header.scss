@@ -1,0 +1,32 @@
+.header {
+  display: flex;
+  padding: 1.5rem 3.8rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6.4rem;
+  border: 3px solid $base;
+  margin-top: 1.6rem;
+  margin-bottom: 5rem;
+  gap: $header-gap-full;
+
+  @media (max-width: 800px) {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .logo__img {
+    height: 5rem;
+  }
+
+  .logo__title {
+    @media (max-width: 850px) {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.details {
+  flex-shrink: 0;
+  width: 21rem;
+  height: 40rem;
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  .details__close {
+    font-size: 2rem;
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    color: $light;
+
+    &:hover {
+      cursor: pointer;
+      color: $base;
+    }
+  }
+
+  .details__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 2rem;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+}
