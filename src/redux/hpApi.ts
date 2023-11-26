@@ -51,11 +51,19 @@ export interface SearchResponse {
   data: Character[];
 }
 
-interface CharacterResponse {
+export interface CharacterResponse {
   data: {
     attributes: CharacterAttributes;
     id: string;
   };
+}
+
+export interface StoreSearchResponse {
+  data: SearchResponse;
+}
+
+export interface StoreCharacterResponse {
+  data: CharacterResponse;
 }
 
 export const hpApi = createApi({
@@ -82,8 +90,6 @@ export const hpApi = createApi({
 });
 
 export const {
-  useGetCharacterQuery,
-  useSearchByNameQuery,
   util: { getRunningQueriesThunk },
 } = hpApi;
 export const { searchByName, getCharacter } = hpApi.endpoints;

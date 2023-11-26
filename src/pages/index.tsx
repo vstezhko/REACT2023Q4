@@ -4,12 +4,12 @@ import React from 'react';
 import {
   getRunningQueriesThunk,
   searchByName,
-  SearchResponse,
-} from '@/redux/hpApi';
+  StoreSearchResponse,
+} from "@/redux/hpApi";
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';
-import { querySlice } from '@/redux/slices/querySlice';
+import { QueryParams, querySlice } from '@/redux/slices/querySlice';
 import { useManagePage } from '@/hooks/useManagePage';
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -34,9 +34,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default function Home({ query, searchResponse }) {
+export default function Home({
+  query,
+  searchResponse,
+}: {
+  query: QueryParams;
+  searchResponse: Record<string, StoreSearchResponse>;
+}) {
   const router = useRouter();
-  const data: SearchResponse = Object.values(searchResponse)[0].data;
+  const searchByNameKey = 'searchByName';
+  const dataKey = Object.keys(searchResponse).find((key) =>
+    key.startsWith(searchByNameKey)
+  );
+  let data;
+  if (dataKey) data = searchResponse[dataKey].data;
 
   const { handlePageChange, handlePageSizeChange } = useManagePage(
     router,
@@ -64,7 +75,6 @@ export default function Home({ query, searchResponse }) {
             </div>
           ) : null}
         </div>
-        {/*<Outlet />*/}
       </main>
     </>
   );

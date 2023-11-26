@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 import SearchBlock from './SearchBlock';
 import ErrorBtn from './ErrorBtn';
 import { wrapper } from '@/redux/store';
 import { useRouter } from 'next/router';
+import { QueryParams } from '@/redux/slices/querySlice';
+import Image from 'next/image';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -17,9 +19,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-const Header = ({ query }) => {
+interface PageSizeParams {
+  query: QueryParams;
+}
+
+const Header: FC<PageSizeParams> = ({ query }) => {
   const router = useRouter();
-  console.log(query);
 
   const handleSearchValueChange = async (newValue: string) => {
     router.push(

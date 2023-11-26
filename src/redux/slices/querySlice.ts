@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 
 export interface QueryParams {
   searchValue?: string;
   page?: number;
   pageSize?: number;
+  id?: string;
 }
 
 export const initialState: QueryParams = {
@@ -30,14 +30,6 @@ export const querySlice = createSlice({
     },
     setQuery: (state, action: PayloadAction<QueryParams>) => {
       state = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.query,
-      };
     },
   },
 });

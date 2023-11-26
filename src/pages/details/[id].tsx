@@ -5,11 +5,13 @@ import {
   getCharacter,
   getRunningQueriesThunk,
   searchByName,
+  StoreCharacterResponse,
+  StoreSearchResponse,
 } from '@/redux/hpApi';
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';
-import { querySlice } from '@/redux/slices/querySlice';
+import { QueryParams, querySlice } from '@/redux/slices/querySlice';
 import { useManagePage } from '@/hooks/useManagePage';
 import Details from '@/components/Details';
 
@@ -41,22 +43,33 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default function Home({ query, searchResponse }) {
+export default function Home({
+  query,
+  searchResponse,
+}: {
+  query: QueryParams;
+  searchResponse: Record<string, StoreSearchResponse | StoreCharacterResponse>;
+}) {
   const router = useRouter();
-  const characterKey = 'getCharacter';
+
   const searchByNameKey = 'searchByName';
   const dataKey = Object.keys(searchResponse).find((key) =>
     key.startsWith(searchByNameKey)
   );
-  let data;
-  if (dataKey) data = searchResponse[dataKey];
+  let searchResponseData;
+  if (dataKey && 'data' in searchResponse[dataKey].data)
+    searchResponseData = searchResponse[dataKey] as StoreSearchResponse;
 
+  const characterKey = 'getCharacter';
   const detailsDataKey = Object.keys(searchResponse).find((key) =>
     key.startsWith(characterKey)
   );
-
   let detailsData;
-  if (detailsDataKey) detailsData = searchResponse[detailsDataKey];
+  if (
+    detailsDataKey &&
+    'attributes' in searchResponse[detailsDataKey].data.data
+  )
+    detailsData = searchResponse[detailsDataKey] as StoreCharacterResponse;
 
   const { handlePageChange, handlePageSizeChange } = useManagePage(
     router,
@@ -65,7 +78,7 @@ export default function Home({ query, searchResponse }) {
 
   const handleClose = () => {
     router.push(
-      `/?searchValue=${query.searchValue.trim()}&page=${Number(
+      `/?searchValue=${query.searchValue?.trim()}&page=${Number(
         query.page
       )}&pageSize=${Number(query.pageSize)}`
     );
@@ -75,8 +88,8 @@ export default function Home({ query, searchResponse }) {
     <>
       <main className="mainInfo">
         <div className="mainInfo__searchResults">
-          <SearchResults results={data?.data.data || []} />
-          {data?.data.data ? (
+          <SearchResults results={searchResponseData?.data.data || []} />
+          {searchResponseData?.data.data ? (
             <div className="mainInfo__managePage">
               <PageSize
                 pageSize={Number(query.pageSize)}
@@ -84,7 +97,8 @@ export default function Home({ query, searchResponse }) {
               />
               <Pagination
                 pageCount={
-                  Number(data?.data.meta.pagination.last) || Number(query.page)
+                  Number(searchResponseData?.data.meta.pagination.last) ||
+                  Number(query.page)
                 }
                 currentPage={Number(query.page)}
                 handlePageChange={handlePageChange}
@@ -93,7 +107,7 @@ export default function Home({ query, searchResponse }) {
           ) : null}
         </div>
         {detailsData ? (
-          <Details detailsData={detailsData.data} handleClose={handleClose} />
+          <Details detailsData={detailsData.data.data.attributes} handleClose={handleClose} />
         ) : null}
       </main>
     </>
