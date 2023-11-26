@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { test, expect, describe } from 'vitest';
-import { searchResponseMock } from "@/test/mocks/responses/searchResponseMock";
-import Home from "@/pages";
+import { searchResponseMock } from '@/test/mocks/responses/searchResponseMock';
+import Home from '@/pages';
 
 const mockPageProps = {
   query: {
@@ -14,7 +14,7 @@ const mockPageProps = {
     'searchByName({"page":1,"pageSize":10,"searchValue":""})': {
       data: searchResponseMock,
     },
-  }
+  },
 };
 
 describe('pagination tests', () => {

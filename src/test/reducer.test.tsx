@@ -1,7 +1,6 @@
-
 import { expect, describe, it } from 'vitest';
-import { reducer } from "@/redux/rootReducer";
-import { initialState, querySlice } from "@/redux/slices/querySlice";
+import { reducer } from '@/redux/rootReducer';
+import { initialState, querySlice } from '@/redux/slices/querySlice';
 
 describe('reducer', () => {
   it('check initial state', () => {

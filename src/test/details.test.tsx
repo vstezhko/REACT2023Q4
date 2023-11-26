@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
 import { createDynamicRouteParser } from 'next-router-mock/dynamic-routes';
-import Details from "@/components/Details";
-import { characterResponseMock } from "@/test/mocks/responses/characterResponseMock";
+import Details from '@/components/Details';
+import { characterResponseMock } from '@/test/mocks/responses/characterResponseMock';
 
 vi.mock('next/router', () => require('next-router-mock'));
 
