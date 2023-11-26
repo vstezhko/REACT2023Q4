@@ -5,7 +5,7 @@ import {
   getRunningQueriesThunk,
   searchByName,
   StoreSearchResponse,
-} from "@/redux/hpApi";
+} from '@/redux/hpApi';
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';
@@ -25,6 +25,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
+    console.log(context.res);
+
     return {
       props: {
         query: query,
@@ -34,6 +36,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
+const errorMessage = <h2>The error occurs on the server</h2>;
+
 export default function Home({
   query,
   searchResponse,
@@ -42,17 +46,20 @@ export default function Home({
   searchResponse: Record<string, StoreSearchResponse>;
 }) {
   const router = useRouter();
+  const { handlePageChange, handlePageSizeChange } = useManagePage(
+    router,
+    query
+  );
   const searchByNameKey = 'searchByName';
   const dataKey = Object.keys(searchResponse).find((key) =>
     key.startsWith(searchByNameKey)
   );
   let data;
-  if (dataKey) data = searchResponse[dataKey].data;
-
-  const { handlePageChange, handlePageSizeChange } = useManagePage(
-    router,
-    query
-  );
+  if (dataKey && searchResponse[dataKey].data) {
+    data = searchResponse[dataKey].data;
+  } else {
+    return errorMessage;
+  }
 
   return (
     <>

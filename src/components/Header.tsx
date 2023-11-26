@@ -4,11 +4,9 @@ import ErrorBtn from './ErrorBtn';
 import { wrapper } from '@/redux/store';
 import { useRouter } from 'next/router';
 import { QueryParams } from '@/redux/slices/querySlice';
-import Image from 'next/image';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    console.log('context!!!!!!!!!!', context);
     const storeQuery = store.getState().query;
 
     return {

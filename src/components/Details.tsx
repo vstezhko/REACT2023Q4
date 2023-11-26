@@ -17,8 +17,6 @@ const Details: FC<DetailsParams> = ({ detailsData, handleClose }) => {
         X
       </button>
 
-      {/*{error ? <h3>sorry, the error occurs</h3> : null}*/}
-
       {detailsData?.image ? (
         <div className="details__image">
           <img src={detailsData.image} alt="character image" />

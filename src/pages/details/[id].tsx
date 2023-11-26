@@ -15,6 +15,8 @@ import { QueryParams, querySlice } from '@/redux/slices/querySlice';
 import { useManagePage } from '@/hooks/useManagePage';
 import Details from '@/components/Details';
 
+const errorMessage = <h2>The error occurs on the server</h2>;
+
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const id = context.params?.id;
@@ -28,7 +30,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     if (id && !Array.isArray(id)) {
-      console.log(id);
       await store.dispatch(getCharacter.initiate(id));
     }
 
@@ -51,6 +52,10 @@ export default function Home({
   searchResponse: Record<string, StoreSearchResponse | StoreCharacterResponse>;
 }) {
   const router = useRouter();
+  const { handlePageChange, handlePageSizeChange } = useManagePage(
+    router,
+    query
+  );
 
   const searchByNameKey = 'searchByName';
   const dataKey = Object.keys(searchResponse).find((key) =>
@@ -67,14 +72,13 @@ export default function Home({
   let detailsData;
   if (
     detailsDataKey &&
-    'attributes' in searchResponse[detailsDataKey].data.data
-  )
+    searchResponse[detailsDataKey].data?.data &&
+    'attributes' in searchResponse[detailsDataKey]?.data?.data
+  ) {
     detailsData = searchResponse[detailsDataKey] as StoreCharacterResponse;
-
-  const { handlePageChange, handlePageSizeChange } = useManagePage(
-    router,
-    query
-  );
+  } else {
+    return errorMessage;
+  }
 
   const handleClose = () => {
     router.push(
@@ -107,7 +111,10 @@ export default function Home({
           ) : null}
         </div>
         {detailsData ? (
-          <Details detailsData={detailsData.data.data.attributes} handleClose={handleClose} />
+          <Details
+            detailsData={detailsData.data.data.attributes}
+            handleClose={handleClose}
+          />
         ) : null}
       </main>
     </>
