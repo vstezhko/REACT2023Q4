@@ -9,7 +9,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 
 const errorMessage = <p className="fallback">Something went wrong</p>;
 
-function App({ Component, pageProps }: AppProps) {
+export function App({ Component, pageProps }: AppProps) {
   const { store } = wrapper.useWrappedStore(pageProps);
   return (
     <Provider store={store}>

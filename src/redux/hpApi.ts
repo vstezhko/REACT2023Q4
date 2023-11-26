@@ -90,6 +90,8 @@ export const hpApi = createApi({
 });
 
 export const {
+  useGetCharacterQuery,
+  useSearchByNameQuery,
   util: { getRunningQueriesThunk },
 } = hpApi;
 export const { searchByName, getCharacter } = hpApi.endpoints;

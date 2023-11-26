@@ -34,7 +34,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
+    console.log(
+      store.getState().hpApi.queries[
+        'getCharacter("309c1379-8579-4401-916e-bc6a17b2b39f")'
+      ]
+    );
     return {
       props: {
         query: query,
@@ -44,7 +48,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default function Home({
+export default function HomeWithDetails({
   query,
   searchResponse,
 }: {

@@ -15,11 +15,6 @@ export const reduxStore = () =>
       getDefaultMiddleware().concat(hpApi.middleware),
   });
 
-// export const useDispatch = () => useReduxDispatch<AppDispatch>();
-// export const useSelector: TypedUseSelectorHook<RootState> = useReduxSelector;
-// export type RootState = ReturnType<typeof reduxStore.getState>;
-// export type AppDispatch = typeof reduxStore.dispatch;
-
 export type ReduxStore = ReturnType<typeof reduxStore>;
 export type ReduxState = ReturnType<ReduxStore['getState']>;
 
