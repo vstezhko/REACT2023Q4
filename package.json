@@ -1,0 +1,30 @@
+{
+  "name": "react2023q4",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "husky": "^8.0.3",
+    "next": "14.0.3",
+    "next-redux-wrapper": "^8.1.0",
+    "prettier": "^3.1.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-redux": "^8.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.54.0",
+    "eslint-config-next": "14.0.3",
+    "sass": "^1.69.5",
+    "typescript": "^5"
+  }
+}
