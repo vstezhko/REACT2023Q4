@@ -5,6 +5,8 @@ interface PageSizeParams {
   pageSize: number;
 }
 
+const pageSizeVariants = [5, 10, 15];
+
 const PageSize: FC<PageSizeParams> = ({ pageSize, handlePageSizeChange }) => {
   function changeSelect(e: BaseSyntheticEvent) {
     handlePageSizeChange(e.target.value);
@@ -14,9 +16,11 @@ const PageSize: FC<PageSizeParams> = ({ pageSize, handlePageSizeChange }) => {
     <div className="pageSize">
       <p>Cards per page</p>
       <select value={pageSize} onChange={changeSelect}>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
+        {pageSizeVariants.map((variant) => (
+          <option key={variant} value={variant}>
+            {variant}
+          </option>
+        ))}
       </select>
     </div>
   );
