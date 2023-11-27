@@ -9,6 +9,7 @@ export const handlers = [
   http.get(`${baseUrl}characters/309c1379-8579-4401-916e-bc6a17b2b39f`, () => {
     return HttpResponse.json(characterResponseMock);
   }),
+  // @ts-ignore
   http.get(`${baseUrl}characters/`, ({ request }) => {
     const url = new URL(request.url);
     const search = url.searchParams.get('filter[name_cont]');
