@@ -1,10 +1,7 @@
 import wrapper from '@/redux/store';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
-import {
-  searchByName,
-  StoreSearchResponse,
-} from '@/redux/slices/hpApi';
+import { searchByName, StoreSearchResponse } from '@/redux/slices/hpApi';
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';

@@ -1,5 +1,5 @@
 import { ParsedUrlQuery } from 'querystring';
-import { QueryParams } from "@/redux/slices/querySlice";
+import { QueryParams } from '@/redux/slices/querySlice';
 
 export const typeContextQuery = (query: ParsedUrlQuery): QueryParams => {
   return {
