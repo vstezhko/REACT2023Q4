@@ -1,45 +1,28 @@
-import { wrapper } from '@/redux/store';
+import wrapper from '@/redux/store';
 import { useRouter } from 'next/router';
 import React from 'react';
 import {
+  CharacterResponse,
   getCharacter,
-  getRunningQueriesThunk,
   searchByName,
+  SearchResponse,
   StoreCharacterResponse,
   StoreSearchResponse,
-} from '@/redux/hpApi';
+} from '@/redux/slices/hpApi';
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';
-import { QueryParams, querySlice } from '@/redux/slices/querySlice';
+import { QueryParams } from '@/redux/slices/querySlice';
 import { useManagePage } from '@/hooks/useManagePage';
 import Details from '@/components/Details';
+import { useFetchPageData } from '@/hooks/useFetchPageData';
+import { getValueByKeyBeginning } from '@/utils/getValueByKeyBeginning';
 
 const errorMessage = <h2>The error occurs on the server</h2>;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const id = context.params?.id;
-    const storeQuery = store.getState().query;
-    const contextQuery = context.query;
-    const query = { ...storeQuery, ...contextQuery };
-
-    if (query) {
-      store.dispatch(querySlice.actions.setQuery(query));
-      await store.dispatch(searchByName.initiate(query));
-    }
-
-    if (id && !Array.isArray(id)) {
-      await store.dispatch(getCharacter.initiate(id));
-    }
-
-    await Promise.all(store.dispatch(getRunningQueriesThunk()));
-    return {
-      props: {
-        query: query,
-        searchResponse: store.getState().hpApi.queries,
-      },
-    };
+    return useFetchPageData(context, store);
   }
 );
 
@@ -55,35 +38,37 @@ export default function HomeWithDetails({
     router,
     query
   );
+  const { page, pageSize } = query;
 
   const searchByNameKey = 'searchByName';
-  const dataKey = Object.keys(searchResponse).find((key) =>
-    key.startsWith(searchByNameKey)
+  const storeSearchResponseRecord = getValueByKeyBeginning(
+    searchByNameKey,
+    searchResponse
   );
-  let searchResponseData;
-  if (dataKey && 'data' in searchResponse[dataKey].data)
-    searchResponseData = searchResponse[dataKey] as StoreSearchResponse;
+  const isStoreSearchResponse =
+    storeSearchResponseRecord && 'meta' in storeSearchResponseRecord.data;
+
+  if (!isStoreSearchResponse) return errorMessage;
+  const { data, meta } = storeSearchResponseRecord.data as SearchResponse;
 
   const characterKey = 'getCharacter';
-  const detailsDataKey = Object.keys(searchResponse).find((key) =>
-    key.startsWith(characterKey)
+  const storeCharacterResponseRecord = getValueByKeyBeginning(
+    characterKey,
+    searchResponse
   );
-  let detailsData;
-  if (
-    detailsDataKey &&
-    searchResponse[detailsDataKey].data?.data &&
-    'attributes' in searchResponse[detailsDataKey]?.data?.data
-  ) {
-    detailsData = searchResponse[detailsDataKey] as StoreCharacterResponse;
-  } else {
-    return errorMessage;
-  }
+  const isStoreCharacterResponse =
+    storeCharacterResponseRecord &&
+    'attributes' in storeCharacterResponseRecord.data.data;
+
+  if (!isStoreCharacterResponse) return errorMessage;
+  const { attributes } = storeCharacterResponseRecord.data
+    .data as CharacterResponse['data'];
 
   const handleClose = () => {
     router.push(
-      `/?searchValue=${query.searchValue?.trim()}&page=${Number(
-        query.page
-      )}&pageSize=${Number(query.pageSize)}`
+      `/?searchValue=${query.searchValue?.trim()}&page=${query.page}&pageSize=${
+        query.pageSize
+      }`
     );
   };
 
@@ -91,29 +76,27 @@ export default function HomeWithDetails({
     <>
       <main className="mainInfo">
         <div className="mainInfo__searchResults">
-          <SearchResults results={searchResponseData?.data.data || []} />
-          {searchResponseData?.data.data ? (
+          <SearchResults results={data || []} />
+          {data ? (
             <div className="mainInfo__managePage">
-              <PageSize
-                pageSize={Number(query.pageSize)}
-                handlePageSizeChange={handlePageSizeChange}
-              />
-              <Pagination
-                pageCount={
-                  Number(searchResponseData?.data.meta.pagination.last) ||
-                  Number(query.page)
-                }
-                currentPage={Number(query.page)}
-                handlePageChange={handlePageChange}
-              />
+              {pageSize ? (
+                <PageSize
+                  pageSize={pageSize}
+                  handlePageSizeChange={handlePageSizeChange}
+                />
+              ) : null}
+              {page ? (
+                <Pagination
+                  pageCount={Number(meta.pagination.last) || page}
+                  currentPage={page}
+                  handlePageChange={handlePageChange}
+                />
+              ) : null}
             </div>
           ) : null}
         </div>
-        {detailsData ? (
-          <Details
-            detailsData={detailsData.data.data.attributes}
-            handleClose={handleClose}
-          />
+        {attributes ? (
+          <Details detailsData={attributes} handleClose={handleClose} />
         ) : null}
       </main>
     </>

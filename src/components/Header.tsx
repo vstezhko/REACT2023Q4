@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import SearchBlock from './SearchBlock';
 import ErrorBtn from './ErrorBtn';
-import { wrapper } from '@/redux/store';
+import wrapper from '@/redux/store';
 import { useRouter } from 'next/router';
 import { QueryParams } from '@/redux/slices/querySlice';
 

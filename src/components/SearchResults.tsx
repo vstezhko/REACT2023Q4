@@ -1,5 +1,5 @@
 import PersonCard from './PersonCard';
-import { Character } from '@/redux/hpApi';
+import { Character } from '@/redux/slices/hpApi';
 
 const SearchResults = ({ results }: { results: Character[] }) => {
   return (

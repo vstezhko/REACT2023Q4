@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { QueryParams } from './slices/querySlice';
+import { QueryParams } from './querySlice';
 import { HYDRATE } from 'next-redux-wrapper';
 
 export interface CharacterAttributes {
@@ -90,8 +90,6 @@ export const hpApi = createApi({
 });
 
 export const {
-  useGetCharacterQuery,
-  useSearchByNameQuery,
   util: { getRunningQueriesThunk },
 } = hpApi;
 export const { searchByName, getCharacter } = hpApi.endpoints;

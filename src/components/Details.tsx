@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CharacterAttributes } from '@/redux/hpApi';
+import { CharacterAttributes } from '@/redux/slices/hpApi';
 
 interface DetailsParams {
   handleClose: () => void;

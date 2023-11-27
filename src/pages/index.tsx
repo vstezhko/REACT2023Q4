@@ -1,88 +1,77 @@
-import { wrapper } from '@/redux/store';
+import wrapper from '@/redux/store';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { FC } from 'react';
 import {
-  getRunningQueriesThunk,
   searchByName,
   StoreSearchResponse,
-} from '@/redux/hpApi';
+} from '@/redux/slices/hpApi';
 import SearchResults from '@/components/SearchResults';
 import Pagination from '@/components/Pagination';
 import PageSize from '@/components/PageSize';
-import { QueryParams, querySlice } from '@/redux/slices/querySlice';
+import { QueryParams } from '@/redux/slices/querySlice';
 import { useManagePage } from '@/hooks/useManagePage';
+import { getValueByKeyBeginning } from '@/utils/getValueByKeyBeginning';
+import { useFetchPageData } from '@/hooks/useFetchPageData';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const storeQuery = store.getState().query;
-    const contextQuery = context.query;
-    const query = { ...storeQuery, ...contextQuery };
-
-    if (query) {
-      store.dispatch(querySlice.actions.setQuery(query));
-      await store.dispatch(searchByName.initiate(query));
-    }
-
-    await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-    console.log(context.res);
-
-    return {
-      props: {
-        query: query,
-        searchResponse: store.getState().hpApi.queries,
-      },
-    };
+    return useFetchPageData(context, store);
   }
 );
 
 const errorMessage = <h2>The error occurs on the server</h2>;
 
-export default function Home({
-  query,
-  searchResponse,
-}: {
+interface HomeParams {
   query: QueryParams;
   searchResponse: Record<string, StoreSearchResponse>;
-}) {
+}
+
+const searchByNameKey = 'searchByName';
+
+const Home: FC<HomeParams> = ({ query, searchResponse }) => {
   const router = useRouter();
+  const { page, pageSize } = query;
   const { handlePageChange, handlePageSizeChange } = useManagePage(
     router,
     query
   );
-  const searchByNameKey = 'searchByName';
-  const dataKey = Object.keys(searchResponse).find((key) =>
-    key.startsWith(searchByNameKey)
+
+  const storeResponseRecord = getValueByKeyBeginning(
+    searchByNameKey,
+    searchResponse
   );
-  let data;
-  if (dataKey && searchResponse[dataKey].data) {
-    data = searchResponse[dataKey].data;
-  } else {
-    return errorMessage;
-  }
+
+  if (!storeResponseRecord) return errorMessage;
+
+  const { data, meta } = storeResponseRecord.data;
 
   return (
     <>
       <main className="mainInfo">
         <div className="mainInfo__searchResults">
-          <SearchResults results={data?.data || []} />
-          {data?.data ? (
+          <SearchResults results={data || []} />
+          {data && meta ? (
             <div className="mainInfo__managePage">
-              <PageSize
-                pageSize={Number(query.pageSize)}
-                handlePageSizeChange={handlePageSizeChange}
-              />
-              <Pagination
-                pageCount={
-                  Number(data?.meta.pagination.last) || Number(query.page)
-                }
-                currentPage={Number(query.page)}
-                handlePageChange={handlePageChange}
-              />
+              {pageSize ? (
+                <PageSize
+                  pageSize={pageSize}
+                  handlePageSizeChange={handlePageSizeChange}
+                />
+              ) : null}
+
+              {page ? (
+                <Pagination
+                  pageCount={Number(meta.pagination.last) || page}
+                  currentPage={page}
+                  handlePageChange={handlePageChange}
+                />
+              ) : null}
             </div>
           ) : null}
         </div>
       </main>
     </>
   );
-}
+};
+
+export default Home;

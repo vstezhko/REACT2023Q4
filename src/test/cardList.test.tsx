@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
-import { Character } from '@/redux/hpApi';
+import { Character } from '@/redux/slices/hpApi';
 import SearchResults from '@/components/SearchResults';
 import { clearSearchResponseMock } from '@/test/mocks/responses/clearSearchResponseMock';
 
