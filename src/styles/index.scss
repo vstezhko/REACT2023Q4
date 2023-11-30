@@ -33,6 +33,10 @@ h2 {
   font-size: 1.8rem;
 }
 
+@mixin inputLabelFont {
+  font-size: 1.3rem;
+}
+
 .wrapper {
   max-width: 80rem;
   margin: 0 auto;
@@ -132,16 +136,33 @@ h2 {
   align-items: center;
 }
 
-.appInput {
+.inputItem {
+  @include inputLabelFont;
+
   width: 100%;
   max-width: 30rem;
-  font-size: 1.3rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
+
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 0.5rem;
+}
 
+.radioGroup,
+.appCheckboxInput {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+}
+
+.appRadioInput {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.appInput {
   input {
     width: 100%;
     padding: 0.5rem;
@@ -152,6 +173,114 @@ h2 {
 
     &:focus-visible {
       outline: 1px solid #a18cd1;
+    }
+  }
+}
+
+.appFileInput {
+  width: 100%;
+  position: relative;
+  margin: 0.5rem 0;
+  text-align: center;
+  @include inputLabelFont;
+
+  input {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+  }
+
+  .appFileInput__iconWrapper {
+    height: 3rem;
+    width: 6rem;
+    margin-right: 1.5rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-right: 1px solid #000;
+  }
+
+  .appFileInput__title {
+    line-height: 1;
+  }
+
+  label {
+    width: 100%;
+    max-width: 20rem;
+    height: 3rem;
+    background: #a18cd1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    border-radius: 0.7rem;
+    cursor: pointer;
+    margin: 0 auto;
+  }
+}
+
+.appDropdown {
+  position: relative;
+
+  .appDropdown__selected {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    box-sizing: border-box;
+    border: 1px solid #a18cd1;
+    border-radius: 0.7rem;
+    background-color: rgba(255, 255, 255, 0.34);
+    cursor: pointer;
+    position: relative;
+    min-height: 2.8rem;
+
+    &_open {
+      outline: 1px solid #a18cd1;
+    }
+  }
+
+  .appDropdown__icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    margin-left: auto;
+    font-size: 1rem;
+    color: #a18cd1;
+    transform: rotateX(0deg) translateY(-50%);
+    transition: transform 0.3s ease;
+
+    &_open {
+      transform: rotateX(180deg) translateY(50%);
+    }
+  }
+
+  .appDropdown__options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    border: 1px solid #a18cd1;
+    border-radius: 0.7rem;
+    background-color: #e3c8eb;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .appDropdown__option {
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+
+    &:hover {
+      background-color: #e6d6ec;
     }
   }
 }

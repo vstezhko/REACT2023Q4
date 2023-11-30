@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import LinkToMain from './LinkToMain';
 import AppInput from './AppInput';
+import AppRadioInput from './AppRadioInput';
+import AppCheckboxInput from './AppCheckboxInput';
+import AppFileInput from './AppFileInput';
+import AppDropdown from './AppDropdown';
 
 const UncontrolledForm = () => {
   const [formData] = useState({
@@ -71,68 +75,24 @@ const UncontrolledForm = () => {
             required={true}
           />
 
-          <div>
+          <div className="inputItem">
             <label>Gender:</label>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  checked={formData.gender === 'male'}
-                  // onChange={handleChange}
-                />
-                Male
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="female"
-                  checked={formData.gender === 'female'}
-                  // onChange={handleChange}
-                />
-                Female
-              </label>
+            <div className="radioGroup">
+              <AppRadioInput label="Male" inputName="gender" value="male" />
+              <AppRadioInput label="Female" inputName="gender" value="female" />
             </div>
           </div>
+          <AppCheckboxInput
+            inputName="acceptTerms"
+            label="Accept Terms & Conditions"
+          />
 
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                name="acceptTerms"
-                checked={formData.acceptTerms}
-                // onChange={handleChange}
-              />
-              Accept Terms & Conditions
-            </label>
-          </div>
-
-          <div>
-            <label htmlFor="picture">Upload Picture:</label>
-            <input
-              type="file"
-              id="picture"
-              name="picture"
-              // onChange={handleChange}
-              accept=".png, .jpeg, .jpg"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="country">Select Country:</label>
-            <select
-              id="country"
-              name="country"
-              value={formData.country}
-              // onChange={handleChange}
-            >
-              {/* Populate options with countries stored in Redux */}
-              {/* <option value="country1">Country 1</option> */}
-              {/* <option value="country2">Country 2</option> */}
-            </select>
-          </div>
+          <AppFileInput
+            inputName="picture"
+            label="Upload Picture:"
+            id="picture"
+          />
+          <AppDropdown />
 
           <button type="submit">Submit</button>
         </form>

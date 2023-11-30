@@ -18,8 +18,8 @@ const AppInput: FC<AppInputParams> = ({
   required = false,
 }) => {
   return (
-    <div className="appInput">
-      <label htmlFor={inputName}>{label}</label>
+    <div className="appInput inputItem">
+      <label htmlFor={id}>{label}</label>
       <input
         type={type}
         id={id}
