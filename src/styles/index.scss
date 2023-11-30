@@ -247,6 +247,15 @@ h2 {
     &_open {
       outline: 1px solid #a18cd1;
     }
+
+    .appDropdown__input {
+      border: none;
+      background: none;
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
   }
 
   .appDropdown__icon {
@@ -276,6 +285,7 @@ h2 {
     cursor: pointer;
     overflow: hidden;
   }
+
   .appDropdown__option {
     padding: 0.5rem 1rem 0.5rem 0.5rem;
 

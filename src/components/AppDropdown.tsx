@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useRef, SyntheticEvent } from 'react';
+import React, { useState, useEffect, useRef, SyntheticEvent, FC } from 'react';
 
-const AppDropdown = () => {
+interface AppDropdownParams {
+  id: string;
+  label: string;
+  options: string[];
+}
+
+const AppDropdown: FC<AppDropdownParams> = ({ id, label, options }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [value, setValue] = useState('');
+  const [showedOptions, setShowedOptions] = useState(options);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -31,21 +38,48 @@ const AppDropdown = () => {
     }
     const option = e.target.dataset.option;
     if (option) {
-      setSelectedOption(option);
+      setValue(option);
       setIsOpen(false);
     }
   };
 
+  const onChangeValue = (e: SyntheticEvent<HTMLInputElement>) => {
+    if (!(e.target instanceof HTMLInputElement)) {
+      return;
+    }
+
+    const newValue = e.target.value;
+    setValue(newValue);
+    if (newValue) {
+      setShowedOptions(
+        options.filter((option) =>
+          option.toLowerCase().includes(newValue.toLowerCase())
+        )
+      );
+      return;
+    }
+    setShowedOptions(options);
+  };
+
   return (
     <div className="appDropdown inputItem" ref={dropdownRef}>
-      <div className="appDropdow__label">Select country</div>
+      <div className="appDropdow__label">{label}</div>
       <div
         className={`appDropdown__selected ${
           isOpen ? 'appDropdown__selected_open' : ''
         }`}
         onClick={toggleDropdown}
       >
-        <span>{selectedOption}</span>
+        <input
+          className="appDropdown__input"
+          type="text"
+          id={id}
+          value={value}
+          // name={inputName}
+          // value={value}
+          onChange={onChangeValue}
+          // required={required}
+        />
         <div
           className={`appDropdown__icon ${
             isOpen ? 'appDropdown__icon_open' : ''
@@ -56,20 +90,16 @@ const AppDropdown = () => {
       </div>
       {isOpen && (
         <div className="appDropdown__options">
-          <div
-            className="appDropdown__option"
-            data-option="Country 1"
-            onClick={selectOption}
-          >
-            Country 1
-          </div>
-          <div
-            className="appDropdown__option"
-            data-option="Country 2"
-            onClick={selectOption}
-          >
-            Country 2
-          </div>
+          {showedOptions.map((option) => (
+            <div
+              key={option}
+              className="appDropdown__option"
+              data-option={option}
+              onClick={selectOption}
+            >
+              {option}
+            </div>
+          ))}
         </div>
       )}
     </div>

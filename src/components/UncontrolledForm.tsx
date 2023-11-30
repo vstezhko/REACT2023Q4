@@ -6,6 +6,8 @@ import AppCheckboxInput from './AppCheckboxInput';
 import AppFileInput from './AppFileInput';
 import AppDropdown from './AppDropdown';
 
+const options = ['Belarus', 'Poland', 'Germany'];
+
 const UncontrolledForm = () => {
   const [formData] = useState({
     name: '',
@@ -92,7 +94,7 @@ const UncontrolledForm = () => {
             label="Upload Picture:"
             id="picture"
           />
-          <AppDropdown />
+          <AppDropdown id="dropdown" label="Select country" options={options} />
 
           <button type="submit">Submit</button>
         </form>
