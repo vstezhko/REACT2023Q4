@@ -1,22 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
+import { AppInputRef } from './AppInput';
 
-interface AppCheckboxInputParams {
+export interface AppCheckboxInputParams {
   label: string;
   inputName: string;
-  checked?: boolean;
-  onChange?: () => void;
+  checkboxRef?: MutableRefObject<AppInputRef>;
 }
 
-const AppCheckboxInput: FC<AppCheckboxInputParams> = ({ label, inputName }) => {
+const AppCheckboxInput: FC<AppCheckboxInputParams> = ({
+  label,
+  inputName,
+  checkboxRef,
+}) => {
   return (
     <div className="inputItem">
       <label className="appCheckboxInput">
-        <input
-          type="checkbox"
-          name={inputName}
-          // checked={formData.acceptTerms}
-          // onChange={handleChange}
-        />
+        <input ref={checkboxRef} type="checkbox" name={inputName} />
         {label}
       </label>
     </div>

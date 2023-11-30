@@ -1,100 +1,135 @@
-import React, { useState } from 'react';
+import React, { FC, FormEvent, MutableRefObject, useRef } from 'react';
 import LinkToMain from './LinkToMain';
-import AppInput from './AppInput';
-import AppRadioInput from './AppRadioInput';
+import AppInput, { AppInputRef } from './AppInput';
 import AppCheckboxInput from './AppCheckboxInput';
 import AppFileInput from './AppFileInput';
 import AppDropdown from './AppDropdown';
+import AppRadioInputSet from './AppRadioInputSet';
 
-const options = ['Belarus', 'Poland', 'Germany'];
+const countryOptions = ['Belarus', 'Poland', 'Germany'];
+
+export interface InputWithRef {
+  ref: MutableRefObject<FC>;
+}
 
 const UncontrolledForm = () => {
-  const [formData] = useState({
-    name: '',
-    age: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    gender: 'male',
-    acceptTerms: false,
-    picture: null,
-    country: '',
-  });
+  const nameInputRef = useRef<AppInputRef>(null);
+  const ageInputRef = useRef<AppInputRef>(null);
+  const emailInputRef = useRef<AppInputRef>(null);
+  const passwordInputRef = useRef<AppInputRef>(null);
+  const confirmPasswordInputRef = useRef<AppInputRef>(null);
+  const maleRadioRef = useRef<AppInputRef>(null);
+  const femaleRadioRef = useRef<AppInputRef>(null);
+  const acceptTermsRef = useRef<AppInputRef>(null);
+  const pictureRef = useRef<AppInputRef>(null);
+  const dropdownInputRef = useRef<AppInputRef>(null);
+
+  const radioOptions = [
+    {
+      label: 'Male',
+      inputName: 'gender',
+      value: 'male',
+      radioRef: maleRadioRef,
+    },
+    {
+      label: 'Female',
+      inputName: 'gender',
+      value: 'female',
+      radioRef: femaleRadioRef,
+    },
+  ];
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const name = nameInputRef.current?.value;
+    const age = ageInputRef.current?.value;
+    const email = emailInputRef.current?.value;
+    const password = passwordInputRef.current?.value;
+    const confirmPassword = confirmPasswordInputRef.current?.value;
+    const male = maleRadioRef.current?.checked;
+    const female = femaleRadioRef.current?.checked;
+    const isAcceptedTerms = acceptTermsRef.current?.checked;
+    const picture = pictureRef.current?.files;
+    const dropdownInput = dropdownInputRef.current?.value;
+    console.log(
+      name,
+      age,
+      email,
+      password,
+      confirmPassword,
+      male,
+      female,
+      isAcceptedTerms,
+      picture,
+      dropdownInput
+    );
+  };
 
   return (
     <>
       <LinkToMain />
       <div className="form">
         <h2>Uncontrolled form</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <AppInput
+            ref={nameInputRef}
             type="text"
             id="name"
             inputName="name"
-            value={formData.name}
-            handleChange={() => {}}
             label="Name:"
-            required={true}
           />
 
           <AppInput
+            ref={ageInputRef}
             type="number"
             id="age"
             inputName="age"
-            value={formData.age}
-            handleChange={() => {}}
             label="Age:"
-            required={true}
           />
 
           <AppInput
-            type="email"
+            ref={emailInputRef}
+            type="text"
             id="email"
             inputName="email"
-            value={formData.email}
-            handleChange={() => {}}
             label="Email:"
-            required={true}
           />
 
           <AppInput
+            ref={passwordInputRef}
             type="password"
             id="password"
             inputName="password"
-            value={formData.password}
-            handleChange={() => {}}
             label="Password:"
-            required={true}
           />
 
           <AppInput
+            ref={confirmPasswordInputRef}
             type="password"
             id="confirmPassword"
             inputName="confirmPassword"
-            value={formData.confirmPassword}
-            handleChange={() => {}}
             label="Confirm Password:"
-            required={true}
           />
+          <AppRadioInputSet label="Gender:" options={radioOptions} />
 
-          <div className="inputItem">
-            <label>Gender:</label>
-            <div className="radioGroup">
-              <AppRadioInput label="Male" inputName="gender" value="male" />
-              <AppRadioInput label="Female" inputName="gender" value="female" />
-            </div>
-          </div>
           <AppCheckboxInput
+            checkboxRef={acceptTermsRef}
             inputName="acceptTerms"
             label="Accept Terms & Conditions"
           />
 
           <AppFileInput
+            pictureRef={pictureRef}
             inputName="picture"
             label="Upload Picture:"
             id="picture"
           />
-          <AppDropdown id="dropdown" label="Select country" options={options} />
+          <AppDropdown
+            id="dropdown"
+            label="Select country"
+            inputRef={dropdownInputRef}
+            options={countryOptions}
+          />
 
           <button type="submit">Submit</button>
         </form>

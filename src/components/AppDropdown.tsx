@@ -1,12 +1,26 @@
-import React, { useState, useEffect, useRef, SyntheticEvent, FC } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  SyntheticEvent,
+  FC,
+  MutableRefObject,
+} from 'react';
+import { AppInputRef } from './AppInput';
 
-interface AppDropdownParams {
+export interface AppDropdownParams {
   id: string;
   label: string;
   options: string[];
+  inputRef?: MutableRefObject<AppInputRef>;
 }
 
-const AppDropdown: FC<AppDropdownParams> = ({ id, label, options }) => {
+const AppDropdown: FC<AppDropdownParams> = ({
+  id,
+  label,
+  options,
+  inputRef,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const [showedOptions, setShowedOptions] = useState(options);
@@ -75,10 +89,8 @@ const AppDropdown: FC<AppDropdownParams> = ({ id, label, options }) => {
           type="text"
           id={id}
           value={value}
-          // name={inputName}
-          // value={value}
           onChange={onChangeValue}
-          // required={required}
+          ref={inputRef}
         />
         <div
           className={`appDropdown__icon ${

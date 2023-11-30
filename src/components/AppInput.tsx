@@ -1,35 +1,24 @@
-import React, { FC } from 'react';
+import React, { forwardRef, MutableRefObject } from 'react';
 
-interface AppInputParams {
+export type AppInputRef = HTMLInputElement | null;
+
+export interface AppInputParams {
   type: string;
   id: string;
   inputName: string;
-  value?: string;
-  handleChange?: () => void;
   label: string;
-  required?: boolean;
+  ref?: MutableRefObject<AppInputRef>;
 }
 
-const AppInput: FC<AppInputParams> = ({
-  label,
-  inputName,
-  id,
-  type,
-  required = false,
-}) => {
-  return (
-    <div className="appInput inputItem">
-      <label htmlFor={id}>{label}</label>
-      <input
-        type={type}
-        id={id}
-        name={inputName}
-        // value={value}
-        // onChange={handleChange}
-        required={required}
-      />
-    </div>
-  );
-};
+const AppInput = forwardRef<AppInputRef, AppInputParams>(
+  ({ label, inputName, id, type }, ref) => {
+    return (
+      <div className="appInput inputItem">
+        <label htmlFor={id}>{label}</label>
+        <input ref={ref} type={type} id={id} name={inputName} />
+      </div>
+    );
+  }
+);
 
 export default AppInput;

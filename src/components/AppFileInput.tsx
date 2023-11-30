@@ -1,12 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
+import { AppInputRef } from './AppInput';
 
-interface AppFileInputParams {
+export interface AppFileInputParams {
   inputName: string;
   label: string;
   id: string;
+  pictureRef?: MutableRefObject<AppInputRef>;
 }
 
-const AppFileInput: FC<AppFileInputParams> = ({ inputName, id, label }) => {
+const AppFileInput: FC<AppFileInputParams> = ({
+  inputName,
+  id,
+  label,
+  pictureRef,
+}) => {
   return (
     <div className="appFileInput">
       <label htmlFor={id}>
@@ -21,10 +28,10 @@ const AppFileInput: FC<AppFileInputParams> = ({ inputName, id, label }) => {
         <span className="appFileInput__title">{label}</span>
       </label>
       <input
+        ref={pictureRef}
         type="file"
         name={inputName}
         id={id}
-        // onChange={handleChange}
         accept=".png, .jpeg, .jpg"
       />
     </div>

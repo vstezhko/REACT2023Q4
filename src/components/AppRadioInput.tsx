@@ -1,27 +1,22 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
+import { AppInputRef } from './AppInput';
 
-interface AppRadioInputParams {
+export interface AppRadioInputParams {
   label: string;
   inputName: string;
   value: string;
-  checked?: boolean;
-  onChange?: () => void;
+  radioRef?: MutableRefObject<AppInputRef>;
 }
 
 const AppRadioInput: FC<AppRadioInputParams> = ({
   label,
   inputName,
   value,
+  radioRef,
 }) => {
   return (
     <label className="appRadioInput">
-      <input
-        type="radio"
-        name={inputName}
-        value={value}
-        // checked={checked}
-        // onChange={handleChange}
-      />
+      <input type="radio" name={inputName} value={value} ref={radioRef} />
       {label}
     </label>
   );
