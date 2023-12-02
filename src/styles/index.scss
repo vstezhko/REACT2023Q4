@@ -137,6 +137,7 @@ h2 {
 }
 
 .inputItem {
+  position: relative;
   @include inputLabelFont;
 
   width: 100%;
@@ -147,6 +148,11 @@ h2 {
   flex-direction: column;
   align-items: start;
   gap: 0.5rem;
+  border: none;
+
+  &__error {
+    color: red;
+  }
 }
 
 .radioGroup,

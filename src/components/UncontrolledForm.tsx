@@ -1,68 +1,81 @@
-import React, { FC, FormEvent, MutableRefObject, useRef } from 'react';
+import React, { FormEvent, useState } from 'react';
 import LinkToMain from './LinkToMain';
-import AppInput, { AppInputRef } from './AppInput';
+import AppInput from './AppInput';
 import AppCheckboxInput from './AppCheckboxInput';
 import AppFileInput from './AppFileInput';
 import AppDropdown from './AppDropdown';
 import AppRadioInputSet from './AppRadioInputSet';
+import { useCreateRefs } from '../hooks/useCreateRefs';
+import {
+  FormFields,
+  FormValue,
+  GenderOptions,
+  validateField,
+} from '../utils/validateForm';
+
+const startErrorsFormData: Record<FormFields, FormError> = {
+  [FormFields.NAME]: { isError: false },
+  [FormFields.AGE]: { isError: false },
+  [FormFields.EMAIL]: { isError: false },
+  [FormFields.PASSWORD]: { isError: false },
+  [FormFields.CONFIRM_PASSWORD]: { isError: false },
+  [FormFields.GENDER]: { isError: false },
+  [FormFields.ACCEPT_TERMS]: { isError: false },
+  [FormFields.PICTURE]: { isError: false },
+  [FormFields.COUNTRY]: { isError: false },
+};
 
 const countryOptions = ['Belarus', 'Poland', 'Germany'];
 
-export interface InputWithRef {
-  ref: MutableRefObject<FC>;
+export interface FormError {
+  isError: boolean;
+  errorMessage?: string;
 }
 
 const UncontrolledForm = () => {
-  const nameInputRef = useRef<AppInputRef>(null);
-  const ageInputRef = useRef<AppInputRef>(null);
-  const emailInputRef = useRef<AppInputRef>(null);
-  const passwordInputRef = useRef<AppInputRef>(null);
-  const confirmPasswordInputRef = useRef<AppInputRef>(null);
-  const maleRadioRef = useRef<AppInputRef>(null);
-  const femaleRadioRef = useRef<AppInputRef>(null);
-  const acceptTermsRef = useRef<AppInputRef>(null);
-  const pictureRef = useRef<AppInputRef>(null);
-  const dropdownInputRef = useRef<AppInputRef>(null);
+  const refs = useCreateRefs();
+  const [errors, setErrors] = useState(startErrorsFormData);
 
   const radioOptions = [
     {
       label: 'Male',
       inputName: 'gender',
       value: 'male',
-      radioRef: maleRadioRef,
+      radioRef: refs[GenderOptions.MALE],
     },
     {
       label: 'Female',
       inputName: 'gender',
       value: 'female',
-      radioRef: femaleRadioRef,
+      radioRef: refs[GenderOptions.FEMALE],
     },
   ];
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const name = nameInputRef.current?.value;
-    const age = ageInputRef.current?.value;
-    const email = emailInputRef.current?.value;
-    const password = passwordInputRef.current?.value;
-    const confirmPassword = confirmPasswordInputRef.current?.value;
-    const male = maleRadioRef.current?.checked;
-    const female = femaleRadioRef.current?.checked;
-    const isAcceptedTerms = acceptTermsRef.current?.checked;
-    const picture = pictureRef.current?.files;
-    const dropdownInput = dropdownInputRef.current?.value;
-    console.log(
-      name,
-      age,
-      email,
-      password,
-      confirmPassword,
-      male,
-      female,
-      isAcceptedTerms,
-      picture,
-      dropdownInput
-    );
+    const inputsData: Record<FormFields, FormValue> = {
+      [FormFields.NAME]: refs[FormFields.NAME].current?.value || undefined,
+      [FormFields.AGE]: refs[FormFields.AGE].current?.value || undefined,
+      [FormFields.EMAIL]: refs[FormFields.EMAIL].current?.value || undefined,
+      [FormFields.PASSWORD]:
+        refs[FormFields.PASSWORD].current?.value || undefined,
+      [FormFields.CONFIRM_PASSWORD]:
+        refs[FormFields.CONFIRM_PASSWORD].current?.value || undefined,
+      [FormFields.GENDER]:
+        refs[GenderOptions.MALE].current?.checked ||
+        refs[GenderOptions.FEMALE].current?.checked,
+      [FormFields.ACCEPT_TERMS]: refs[FormFields.ACCEPT_TERMS].current?.checked,
+      [FormFields.PICTURE]: refs[FormFields.PICTURE].current?.files?.item(0),
+      [FormFields.COUNTRY]:
+        refs[FormFields.COUNTRY].current?.value || undefined,
+    };
+
+    Object.keys(inputsData).forEach((key) => {
+      setErrors((prevState) => ({
+        ...prevState,
+        [key]: validateField(inputsData[key as FormFields], key as FormFields),
+      }));
+    });
   };
 
   return (
@@ -72,63 +85,75 @@ const UncontrolledForm = () => {
         <h2>Uncontrolled form</h2>
         <form onSubmit={handleSubmit}>
           <AppInput
-            ref={nameInputRef}
+            ref={refs[FormFields.NAME]}
             type="text"
-            id="name"
+            id={FormFields.NAME}
             inputName="name"
             label="Name:"
+            error={errors[FormFields.NAME]}
           />
 
           <AppInput
-            ref={ageInputRef}
+            ref={refs[FormFields.AGE]}
             type="number"
-            id="age"
+            id={FormFields.AGE}
             inputName="age"
             label="Age:"
+            error={errors[FormFields.AGE]}
           />
 
           <AppInput
-            ref={emailInputRef}
+            ref={refs[FormFields.EMAIL]}
             type="text"
-            id="email"
+            id={FormFields.EMAIL}
             inputName="email"
             label="Email:"
+            error={errors[FormFields.EMAIL]}
           />
 
           <AppInput
-            ref={passwordInputRef}
+            ref={refs[FormFields.PASSWORD]}
             type="password"
-            id="password"
+            id={FormFields.PASSWORD}
             inputName="password"
             label="Password:"
+            error={errors[FormFields.PASSWORD]}
           />
 
           <AppInput
-            ref={confirmPasswordInputRef}
+            ref={refs[FormFields.CONFIRM_PASSWORD]}
             type="password"
-            id="confirmPassword"
+            id={FormFields.CONFIRM_PASSWORD}
             inputName="confirmPassword"
             label="Confirm Password:"
+            error={errors[FormFields.PASSWORD]}
           />
-          <AppRadioInputSet label="Gender:" options={radioOptions} />
+          <AppRadioInputSet
+            label="Gender:"
+            options={radioOptions}
+            error={errors[FormFields.GENDER]}
+          />
 
           <AppCheckboxInput
-            checkboxRef={acceptTermsRef}
+            checkboxRef={refs[FormFields.ACCEPT_TERMS]}
             inputName="acceptTerms"
             label="Accept Terms & Conditions"
+            error={errors[FormFields.ACCEPT_TERMS]}
           />
 
           <AppFileInput
-            pictureRef={pictureRef}
+            pictureRef={refs[FormFields.PICTURE]}
             inputName="picture"
             label="Upload Picture:"
             id="picture"
+            error={errors[FormFields.PICTURE]}
           />
           <AppDropdown
             id="dropdown"
             label="Select country"
-            inputRef={dropdownInputRef}
+            inputRef={refs[FormFields.COUNTRY]}
             options={countryOptions}
+            error={errors[FormFields.COUNTRY]}
           />
 
           <button type="submit">Submit</button>

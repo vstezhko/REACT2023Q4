@@ -7,11 +7,13 @@ import React, {
   MutableRefObject,
 } from 'react';
 import { AppInputRef } from './AppInput';
+import { FormError } from './UncontrolledForm';
 
 export interface AppDropdownParams {
   id: string;
   label: string;
   options: string[];
+  error: FormError;
   inputRef?: MutableRefObject<AppInputRef>;
 }
 
@@ -19,6 +21,7 @@ const AppDropdown: FC<AppDropdownParams> = ({
   id,
   label,
   options,
+  error,
   inputRef,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,6 +103,9 @@ const AppDropdown: FC<AppDropdownParams> = ({
           &#9660;
         </div>
       </div>
+      {error.isError && (
+        <p className="inputItem__error">{error.errorMessage}</p>
+      )}
       {isOpen && (
         <div className="appDropdown__options">
           {showedOptions.map((option) => (
