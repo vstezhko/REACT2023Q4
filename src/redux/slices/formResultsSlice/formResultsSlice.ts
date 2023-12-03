@@ -12,8 +12,17 @@ export const formResultsSlice = createSlice({
   name: 'formResultsSlice',
   initialState,
   reducers: {
-    addForm: (state, action: PayloadAction<Record<FormFields, FormValue>>) => {
+    addUncontrolledForm: (
+      state,
+      action: PayloadAction<Record<FormFields, FormValue>>
+    ) => {
       state.uncontrolled.push(action.payload);
+    },
+    addReactHookForm: (
+      state,
+      action: PayloadAction<Record<FormFields, FormValue>>
+    ) => {
+      state.reactHook.push(action.payload);
     },
   },
 });

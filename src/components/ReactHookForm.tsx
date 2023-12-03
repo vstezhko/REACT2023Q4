@@ -11,14 +11,12 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldError, FormProvider, useForm } from 'react-hook-form';
 import { transformImage } from '../utils/transformImage';
-import { useDispatch } from '../redux/store';
+import { useDispatch, useSelector } from '../redux/store';
 import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSlice';
 import { useNavigate } from 'react-router-dom';
 import AppRadioInputSetHook from './AppRadioInputSetHook';
 import AppDropdownHook from './AppDropdownHook';
 import AppPasswordInputHook from './AppPasswordInputHook';
-
-const countryOptions = ['Belarus', 'Poland', 'Germany'];
 
 export interface FormValues {
   name: string;
@@ -33,6 +31,7 @@ export interface FormValues {
 }
 
 const ReactHookForm = () => {
+  const countryOptions = useSelector((state) => state.countriesSlice);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -68,7 +67,7 @@ const ReactHookForm = () => {
       base64String = await transformImage(data.picture[0]);
     }
     dispatch(
-      formResultsSlice.actions.addForm({
+      formResultsSlice.actions.addReactHookForm({
         ...data,
         picture: base64String,
       })

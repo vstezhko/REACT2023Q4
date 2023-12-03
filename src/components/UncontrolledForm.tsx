@@ -12,7 +12,7 @@ import {
   GenderOptions,
   validateField,
 } from '../utils/validateForm';
-import { useDispatch } from '../redux/store';
+import { useDispatch, useSelector } from '../redux/store';
 import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSlice';
 import { transformImage } from '../utils/transformImage';
 import { useNavigate } from 'react-router-dom';
@@ -30,8 +30,6 @@ const startErrorsFormData: Record<FormFields, FormError> = {
   [FormFields.COUNTRY]: { isError: false },
 };
 
-const countryOptions = ['Belarus', 'Poland', 'Germany'];
-
 export interface FormError {
   isError: boolean;
   message?: string;
@@ -39,6 +37,7 @@ export interface FormError {
 
 const UncontrolledForm = () => {
   const refs = useCreateRefs();
+  const countryOptions = useSelector((state) => state.countriesSlice);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState(startErrorsFormData);
@@ -93,7 +92,7 @@ const UncontrolledForm = () => {
         base64String = await transformImage(inputsData.picture[0]);
       }
       dispatch(
-        formResultsSlice.actions.addForm({
+        formResultsSlice.actions.addUncontrolledForm({
           ...inputsData,
           picture: base64String,
         })
