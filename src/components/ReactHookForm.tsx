@@ -16,6 +16,7 @@ import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSl
 import { useNavigate } from 'react-router-dom';
 import AppRadioInputSetHook from './AppRadioInputSetHook';
 import AppDropdownHook from './AppDropdownHook';
+import AppPasswordInputHook from './AppPasswordInputHook';
 
 const countryOptions = ['Belarus', 'Poland', 'Germany'];
 
@@ -111,18 +112,16 @@ const ReactHookForm = () => {
               error={errors[FormFields.EMAIL] as FieldError}
             />
 
-            <AppInput
+            <AppPasswordInputHook
               {...register(FormFields.PASSWORD)}
-              type="password"
               id={FormFields.PASSWORD}
               inputName="password"
               label="Password:"
               error={errors[FormFields.PASSWORD] as FieldError}
             />
 
-            <AppInput
+            <AppPasswordInputHook
               {...register(FormFields.CONFIRM_PASSWORD)}
-              type="password"
               id={FormFields.CONFIRM_PASSWORD}
               inputName="confirmPassword"
               label="Confirm Password:"

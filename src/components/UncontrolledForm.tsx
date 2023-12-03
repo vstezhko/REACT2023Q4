@@ -16,6 +16,7 @@ import { useDispatch } from '../redux/store';
 import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSlice';
 import { transformImage } from '../utils/transformImage';
 import { useNavigate } from 'react-router-dom';
+import AppPasswordInput from './AppPasswordInput';
 
 const startErrorsFormData: Record<FormFields, FormError> = {
   [FormFields.NAME]: { isError: false },
@@ -134,18 +135,16 @@ const UncontrolledForm = () => {
             error={errors[FormFields.EMAIL]}
           />
 
-          <AppInput
+          <AppPasswordInput
             ref={refs[FormFields.PASSWORD]}
-            type="password"
             id={FormFields.PASSWORD}
             inputName="password"
             label="Password:"
             error={errors[FormFields.PASSWORD]}
           />
 
-          <AppInput
+          <AppPasswordInput
             ref={refs[FormFields.CONFIRM_PASSWORD]}
-            type="password"
             id={FormFields.CONFIRM_PASSWORD}
             inputName="confirmPassword"
             label="Confirm Password:"
