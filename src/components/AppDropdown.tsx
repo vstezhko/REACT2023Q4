@@ -8,12 +8,13 @@ import React, {
 } from 'react';
 import { AppInputRef } from './AppInput';
 import { FormError } from './UncontrolledForm';
+import { FieldError } from 'react-hook-form';
 
 export interface AppDropdownParams {
   id: string;
   label: string;
   options: string[];
-  error: FormError;
+  error: FormError | FieldError | undefined;
   inputRef?: MutableRefObject<AppInputRef>;
 }
 
@@ -78,6 +79,8 @@ const AppDropdown: FC<AppDropdownParams> = ({
     setShowedOptions(options);
   };
 
+  const isError = error?.message;
+
   return (
     <div className="appDropdown inputItem" ref={dropdownRef}>
       <div className="appDropdow__label">{label}</div>
@@ -103,9 +106,7 @@ const AppDropdown: FC<AppDropdownParams> = ({
           &#9660;
         </div>
       </div>
-      {error.isError && (
-        <p className="inputItem__error">{error.errorMessage}</p>
-      )}
+      {isError && <p className="inputItem__error">{error.message}</p>}
       {isOpen && (
         <div className="appDropdown__options">
           {showedOptions.map((option) => (

@@ -1,12 +1,13 @@
 import React, { FC, MutableRefObject } from 'react';
 import { AppInputRef } from './AppInput';
 import { FormError } from './UncontrolledForm';
+import { FieldError } from 'react-hook-form';
 
 export interface AppFileInputParams {
   inputName: string;
   label: string;
   id: string;
-  error: FormError;
+  error: FormError | FieldError | undefined;
   pictureRef?: MutableRefObject<AppInputRef>;
 }
 
@@ -17,6 +18,8 @@ const AppFileInput: FC<AppFileInputParams> = ({
   error,
   pictureRef,
 }) => {
+  const isError = error?.message;
+
   return (
     <div className="appFileInput">
       <label htmlFor={id}>
@@ -37,9 +40,7 @@ const AppFileInput: FC<AppFileInputParams> = ({
         id={id}
         accept=".png, .jpeg, .jpg"
       />
-      {error.isError && (
-        <p className="inputItem__error">{error.errorMessage}</p>
-      )}
+      {isError && <p className="inputItem__error">{error.message}</p>}
     </div>
   );
 };

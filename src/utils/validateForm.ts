@@ -21,7 +21,7 @@ export enum GenderOptions {
   FEMALE = 'female',
 }
 
-const validationSchema = object().shape({
+export const validationSchema = object().shape({
   [FormFields.NAME]: Yup.string()
     .required('Name is required')
     .matches(/^[A-Z][a-z]*$/, 'Name should start with an uppercase letter'),
@@ -88,7 +88,7 @@ export const validateField = (
           if (error.path) {
             acc[error.path as FormFields] = {
               isError: true,
-              errorMessage: error.message,
+              message: error.message,
             } as FormError;
           }
           return acc;

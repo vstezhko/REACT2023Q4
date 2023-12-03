@@ -31,7 +31,7 @@ const countryOptions = ['Belarus', 'Poland', 'Germany'];
 
 export interface FormError {
   isError: boolean;
-  errorMessage?: string;
+  message?: string;
 }
 
 const UncontrolledForm = () => {
@@ -141,7 +141,7 @@ const UncontrolledForm = () => {
           />
 
           <AppCheckboxInput
-            checkboxRef={refs[FormFields.ACCEPT_TERMS]}
+            ref={refs[FormFields.ACCEPT_TERMS]}
             inputName="acceptTerms"
             label="Accept Terms & Conditions"
             error={errors[FormFields.ACCEPT_TERMS]}

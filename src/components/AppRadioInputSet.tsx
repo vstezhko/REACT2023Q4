@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import AppRadioInput, { AppRadioInputParams } from './AppRadioInput';
 import { FormError } from './UncontrolledForm';
+import { FieldError } from 'react-hook-form';
 
 export interface AppRadioInputSetParams {
   label: string;
   options: AppRadioInputParams[];
-  error: FormError;
+  error: FormError | FieldError | undefined;
 }
 
 const AppRadioInputSet: FC<AppRadioInputSetParams> = ({
@@ -13,6 +14,8 @@ const AppRadioInputSet: FC<AppRadioInputSetParams> = ({
   options,
   error,
 }) => {
+  const isError = error?.message;
+
   return (
     <div className="inputItem">
       <label>{label}</label>
@@ -21,9 +24,7 @@ const AppRadioInputSet: FC<AppRadioInputSetParams> = ({
           <AppRadioInput {...option} key={option.value} />
         ))}
       </div>
-      {error.isError && (
-        <p className="inputItem__error">{error.errorMessage}</p>
-      )}
+      {isError && <p className="inputItem__error">{error.message}</p>}
     </div>
   );
 };

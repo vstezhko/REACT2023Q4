@@ -1,5 +1,6 @@
 import React, { forwardRef, MutableRefObject, useState } from 'react';
 import { FormError } from './UncontrolledForm';
+import { FieldError } from 'react-hook-form';
 
 export type AppInputRef = HTMLInputElement | null;
 
@@ -8,7 +9,7 @@ export interface AppInputParams {
   id: string;
   inputName: string;
   label: string;
-  error: FormError;
+  error: FormError | FieldError | undefined;
   ref?: MutableRefObject<AppInputRef>;
 }
 
@@ -37,6 +38,8 @@ const AppInput = forwardRef<AppInputRef, AppInputParams>(
       />
     );
 
+    const isError = error?.message;
+
     return (
       <div className="appInput inputItem">
         <label htmlFor={id}>{label}</label>
@@ -47,9 +50,7 @@ const AppInput = forwardRef<AppInputRef, AppInputParams>(
           id={id}
           name={inputName}
         />
-        {error.isError && (
-          <p className="inputItem__error">{error.errorMessage}</p>
-        )}
+        {isError && <p className="inputItem__error">{error.message}</p>}
         {isPasswordField && passwordIcon}
       </div>
     );
