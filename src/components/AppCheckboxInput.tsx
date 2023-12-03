@@ -19,7 +19,7 @@ const AppCheckboxInput = forwardRef<AppInputRef, AppCheckboxInputParams>(
           <input ref={ref} type="checkbox" name={inputName} {...rest} />
           {label}
         </label>
-        {isError && <p className="inputItem__error">{error.message}</p>}
+        <p className="inputItem__error">{isError ? error.message : ' '}</p>
       </div>
     );
   }

@@ -24,7 +24,7 @@ export enum GenderOptions {
 export const validationSchema = object().shape({
   [FormFields.NAME]: Yup.string()
     .required('Name is required')
-    .matches(/^[A-Z][a-z]*$/, 'Name should start with an uppercase letter'),
+    .matches(/^[A-Z]/, 'Name should start with an uppercase letter'),
 
   [FormFields.AGE]: Yup.number()
     .required('Age is required')

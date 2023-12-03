@@ -154,7 +154,7 @@ const ReactHookForm = () => {
               error={errors[FormFields.COUNTRY] as FieldError}
             />
 
-            <button type="submit" disabled={!isValid}>
+            <button className="btn" type="submit" disabled={!isValid}>
               Submit
             </button>
           </form>

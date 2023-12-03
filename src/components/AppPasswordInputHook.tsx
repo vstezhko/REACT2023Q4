@@ -62,7 +62,7 @@ const AppPasswordInputHook = forwardRef<
         onChange={handleChange}
       />
       {value && <PasswordStrength password={value} />}
-      {isError && <p className="inputItem__error">{error.message}</p>}
+      <p className="inputItem__error">{isError ? error.message : ' '}</p>
       {passwordIcon}
     </div>
   );

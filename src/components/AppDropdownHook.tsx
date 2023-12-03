@@ -112,7 +112,7 @@ const AppDropdownHook = forwardRef<AppInputRef, AppDropdownParams>(
             &#9660;
           </div>
         </div>
-        {isError && <p className="inputItem__error">{error.message}</p>}
+        <p className="inputItem__error">{isError ? error.message : ' '}</p>
         {isOpen && (
           <div className="appDropdown__options">
             {showedOptions.map((option) => (

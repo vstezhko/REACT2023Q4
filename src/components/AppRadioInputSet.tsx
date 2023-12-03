@@ -24,7 +24,7 @@ const AppRadioInputSet: FC<AppRadioInputSetParams> = ({
           <AppRadioInput {...option} key={option.value} />
         ))}
       </div>
-      {isError && <p className="inputItem__error">{error.message}</p>}
+      <p className="inputItem__error">{isError ? error.message : ' '}</p>
     </div>
   );
 };

@@ -39,7 +39,7 @@ const AppRadioInputSetHook: FC<AppRadioInputSetParams> = ({
           />
         ))}
       </div>
-      {isError && <p className="inputItem__error">{error.message}</p>}
+      <p className="inputItem__error">{isError ? error.message : ' '}</p>
     </div>
   );
 };

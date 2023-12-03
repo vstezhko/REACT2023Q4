@@ -27,7 +27,7 @@ const AppInput = forwardRef<AppInputRef, AppInputParams>(
           name={inputName}
           {...rest}
         />
-        {isError && <p className="inputItem__error">{error.message}</p>}
+        <p className="inputItem__error">{isError ? error.message : ' '}</p>
       </div>
     );
   }

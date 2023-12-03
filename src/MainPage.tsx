@@ -1,7 +1,7 @@
 import Card, { CardParams } from './components/Card';
 import { Links } from './types/enums';
 import { useSelector } from './redux/store';
-import { FormFields } from './utils/validateForm';
+import FilledFormCard from './components/FilledFormCard';
 
 const formsInfo: CardParams[] = [
   {
@@ -25,9 +25,24 @@ function MainPage() {
           <Card key={item.link} {...item} />
         ))}
       </div>
-      {formResultsSlice.uncontrolled.map((item, index) => (
-        <p key={index}>{item[FormFields.NAME] as string}</p>
-      ))}
+      <div className="main__formsInfo">
+        <div className="uncontrolledCards">
+          {formResultsSlice.uncontrolled.map((item) => (
+            <FilledFormCard
+              {...item}
+              key={`${item.name}${item.country}${item.picture}`}
+            />
+          ))}
+        </div>
+        <div className="hookCards">
+          {formResultsSlice.reactHook.map((item) => (
+            <FilledFormCard
+              {...item}
+              key={`${item.name}${item.country}${item.picture}`}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
