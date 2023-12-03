@@ -32,8 +32,6 @@ const AppDropdownHook = forwardRef<AppInputRef, AppDropdownParams>(
 
     useEffect(() => {
       const handleOutsideClick = (event: MouseEvent) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         if (
           dropdownRef.current &&
           !dropdownRef.current.contains(event.target)
