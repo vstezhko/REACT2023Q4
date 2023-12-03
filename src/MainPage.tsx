@@ -17,7 +17,7 @@ const formsInfo: CardParams[] = [
 ];
 
 function MainPage() {
-  const uncontrolled = useSelector((state) => state.uncontrolled);
+  const formResultsSlice = useSelector((state) => state.formResultsSlice);
   return (
     <div className="main">
       <div className="main__formsInfo">
@@ -25,7 +25,7 @@ function MainPage() {
           <Card key={item.link} {...item} />
         ))}
       </div>
-      {uncontrolled.map((item, index) => (
+      {formResultsSlice.uncontrolled.map((item, index) => (
         <p key={index}>{item[FormFields.NAME] as string}</p>
       ))}
     </div>

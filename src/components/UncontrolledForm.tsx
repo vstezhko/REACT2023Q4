@@ -13,7 +13,7 @@ import {
   validateField,
 } from '../utils/validateForm';
 import { useDispatch } from '../redux/store';
-import { uncontrolledSlice } from '../redux/slices/uncontolledSlice/uncontrolledSlice';
+import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSlice';
 
 const startErrorsFormData: Record<FormFields, FormError> = {
   [FormFields.NAME]: { isError: false },
@@ -80,7 +80,7 @@ const UncontrolledForm = () => {
     if (
       !Object.values(validationErrors).filter((field) => field.isError).length
     ) {
-      dispatch(uncontrolledSlice.actions.addForm(inputsData));
+      dispatch(formResultsSlice.actions.addForm(inputsData));
     }
   };
 

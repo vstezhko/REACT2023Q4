@@ -1,5 +1,5 @@
-import { uncontrolledSlice } from './slices/uncontolledSlice/uncontrolledSlice';
+import { formResultsSlice } from './slices/formResultsSlice/formResultsSlice';
 
 export const reducer = {
-  uncontrolled: uncontrolledSlice.reducer,
+  formResultsSlice: formResultsSlice.reducer,
 };
