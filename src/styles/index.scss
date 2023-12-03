@@ -33,6 +33,13 @@ h2 {
   font-size: 1.8rem;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition:
+    background-color 0s 600000s,
+    color 0s 600000s;
+}
+
 @mixin inputLabelFont {
   font-size: 1.3rem;
 }

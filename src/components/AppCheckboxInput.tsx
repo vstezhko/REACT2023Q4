@@ -10,13 +10,13 @@ export interface AppCheckboxInputParams {
 }
 
 const AppCheckboxInput = forwardRef<AppInputRef, AppCheckboxInputParams>(
-  ({ label, inputName, error }, ref) => {
+  ({ label, inputName, error, ...rest }, ref) => {
     const isError = error?.message;
 
     return (
       <div className="inputItem">
         <label className="appCheckboxInput">
-          <input ref={ref} type="checkbox" name={inputName} />
+          <input ref={ref} type="checkbox" name={inputName} {...rest} />
           {label}
         </label>
         {isError && <p className="inputItem__error">{error.message}</p>}

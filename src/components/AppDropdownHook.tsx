@@ -7,21 +7,28 @@ import React, {
 } from 'react';
 import { AppInputRef } from './AppInput';
 import { FormError } from './UncontrolledForm';
-import { FieldError } from 'react-hook-form';
+import {
+  FieldError,
+  useFormContext,
+  UseFormRegisterReturn,
+} from 'react-hook-form';
+import { FormFields } from '../utils/validateForm';
 
 export interface AppDropdownParams {
   id: string;
   label: string;
   options: string[];
   error: FormError | FieldError | undefined;
+  register?: UseFormRegisterReturn;
 }
 
-const AppDropdown = forwardRef<AppInputRef, AppDropdownParams>(
-  ({ id, label, options, error }, ref) => {
+const AppDropdownHook = forwardRef<AppInputRef, AppDropdownParams>(
+  ({ id, label, options, error, register }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [showedOptions, setShowedOptions] = useState(options);
     const dropdownRef = useRef(null);
+    const { setValue } = useFormContext();
 
     useEffect(() => {
       const handleOutsideClick = (event: MouseEvent) => {
@@ -53,6 +60,7 @@ const AppDropdown = forwardRef<AppInputRef, AppDropdownParams>(
       const option = e.target.dataset.option;
       if (option) {
         setInputValue(option);
+        setValue(FormFields.COUNTRY, option, { shouldValidate: true });
         setIsOpen(false);
       }
     };
@@ -64,6 +72,7 @@ const AppDropdown = forwardRef<AppInputRef, AppDropdownParams>(
 
       const newValue = e.target.value;
       setInputValue(newValue);
+      setValue(FormFields.COUNTRY, newValue, { shouldValidate: true });
       if (newValue) {
         setShowedOptions(
           options.filter((option) =>
@@ -91,6 +100,7 @@ const AppDropdown = forwardRef<AppInputRef, AppDropdownParams>(
             type="text"
             id={id}
             value={inputValue}
+            {...register}
             onChange={onChangeValue}
             ref={ref}
           />
@@ -122,4 +132,4 @@ const AppDropdown = forwardRef<AppInputRef, AppDropdownParams>(
   }
 );
 
-export default AppDropdown;
+export default AppDropdownHook;

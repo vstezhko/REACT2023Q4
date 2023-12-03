@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { object, ValidationError } from 'yup';
 import { FormError } from '../components/UncontrolledForm';
 
-export type FormValue = string | number | File | boolean | undefined | null;
+export type FormValue = string | number | FileList | boolean | undefined | null;
 
 export enum FormFields {
   NAME = 'name',
@@ -49,22 +49,28 @@ export const validationSchema = object().shape({
     .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'need 1 special symbol')
     .oneOf([Yup.ref(FormFields.PASSWORD)], 'Passwords must match'),
 
-  [FormFields.GENDER]: Yup.boolean().oneOf([true], 'Gender is required'),
+  [FormFields.GENDER]: Yup.string()
+    .required('Gender is required')
+    .oneOf([GenderOptions.MALE, GenderOptions.FEMALE], 'Gender is required'),
 
-  [FormFields.ACCEPT_TERMS]: Yup.boolean().oneOf(
-    [true],
-    'Accept Terms & Conditions is required'
-  ),
+  [FormFields.ACCEPT_TERMS]: Yup.boolean()
+    .required('This field is required')
+    .oneOf([true], 'Accept Terms & Conditions is required'),
 
   [FormFields.PICTURE]: Yup.mixed()
+    .required('Picture is required')
     .test('fileSize', 'Picture is required', (value) => {
-      if (!value || value instanceof File) return true;
+      if (value && value instanceof FileList && value.length) return true;
+      if (value && value instanceof File) return true;
     })
-
-    .test('fileSize', 'File size is too large', (value) => {
-      if (value instanceof File) return value.size <= 1024 * 1024;
+    .test('fileSize', 'File size is too large (max size is 5MB)', (value) => {
+      if (value instanceof File) return value.size <= 5 * 1024 * 1024;
+      if (value instanceof FileList && !!value[0])
+        return value[0].size <= 5 * 1024 * 1024;
     })
     .test('fileType', 'Invalid file type', (value) => {
+      if (value instanceof FileList && !!value[0])
+        return ['image/jpeg', 'image/png'].includes(value[0].type);
       if (value instanceof File)
         return ['image/jpeg', 'image/png'].includes(value.type);
     }),

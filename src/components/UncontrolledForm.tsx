@@ -14,6 +14,8 @@ import {
 } from '../utils/validateForm';
 import { useDispatch } from '../redux/store';
 import { formResultsSlice } from '../redux/slices/formResultsSlice/formResultsSlice';
+import { transformImage } from '../utils/transformImage';
+import { useNavigate } from 'react-router-dom';
 
 const startErrorsFormData: Record<FormFields, FormError> = {
   [FormFields.NAME]: { isError: false },
@@ -36,6 +38,7 @@ export interface FormError {
 
 const UncontrolledForm = () => {
   const refs = useCreateRefs();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState(startErrorsFormData);
 
@@ -53,8 +56,14 @@ const UncontrolledForm = () => {
       radioRef: refs[GenderOptions.FEMALE],
     },
   ];
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const genderValue = refs[GenderOptions.MALE].current?.checked
+      ? GenderOptions.MALE
+      : refs[GenderOptions.FEMALE].current?.checked
+        ? GenderOptions.FEMALE
+        : undefined;
 
     const inputsData: Record<FormFields, FormValue> = {
       [FormFields.NAME]: refs[FormFields.NAME].current?.value || undefined,
@@ -64,11 +73,9 @@ const UncontrolledForm = () => {
         refs[FormFields.PASSWORD].current?.value || undefined,
       [FormFields.CONFIRM_PASSWORD]:
         refs[FormFields.CONFIRM_PASSWORD].current?.value || undefined,
-      [FormFields.GENDER]:
-        refs[GenderOptions.MALE].current?.checked ||
-        refs[GenderOptions.FEMALE].current?.checked,
+      [FormFields.GENDER]: genderValue,
       [FormFields.ACCEPT_TERMS]: refs[FormFields.ACCEPT_TERMS].current?.checked,
-      [FormFields.PICTURE]: refs[FormFields.PICTURE].current?.files?.item(0),
+      [FormFields.PICTURE]: refs[FormFields.PICTURE].current?.files,
       [FormFields.COUNTRY]:
         refs[FormFields.COUNTRY].current?.value || undefined,
     };
@@ -80,7 +87,17 @@ const UncontrolledForm = () => {
     if (
       !Object.values(validationErrors).filter((field) => field.isError).length
     ) {
-      dispatch(formResultsSlice.actions.addForm(inputsData));
+      let base64String;
+      if (inputsData.picture && inputsData.picture instanceof FileList) {
+        base64String = await transformImage(inputsData.picture[0]);
+      }
+      dispatch(
+        formResultsSlice.actions.addForm({
+          ...inputsData,
+          picture: base64String,
+        })
+      );
+      navigate('/');
     }
   };
 
@@ -148,16 +165,16 @@ const UncontrolledForm = () => {
           />
 
           <AppFileInput
-            pictureRef={refs[FormFields.PICTURE]}
+            ref={refs[FormFields.PICTURE]}
             inputName="picture"
             label="Upload Picture:"
             id="picture"
             error={errors[FormFields.PICTURE]}
           />
           <AppDropdown
+            ref={refs[FormFields.COUNTRY]}
             id="dropdown"
             label="Select country"
-            inputRef={refs[FormFields.COUNTRY]}
             options={countryOptions}
             error={errors[FormFields.COUNTRY]}
           />

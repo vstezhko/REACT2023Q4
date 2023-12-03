@@ -9,12 +9,12 @@ export interface AppInputParams {
   id: string;
   inputName: string;
   label: string;
-  error: FormError | FieldError | undefined;
+  error?: FormError | FieldError | undefined;
   ref?: MutableRefObject<AppInputRef>;
 }
 
 const AppInput = forwardRef<AppInputRef, AppInputParams>(
-  ({ label, inputName, id, type, error }, ref) => {
+  ({ label, inputName, id, type, error, ...rest }, ref) => {
     const [showInputData, setShowInputData] = useState(type === 'password');
     const isPasswordField = type === 'password';
 
@@ -49,6 +49,7 @@ const AppInput = forwardRef<AppInputRef, AppInputParams>(
           type={showInputData ? type : 'text'}
           id={id}
           name={inputName}
+          {...rest}
         />
         {isError && <p className="inputItem__error">{error.message}</p>}
         {isPasswordField && passwordIcon}
