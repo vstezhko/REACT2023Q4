@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
-import { ValidationError } from 'yup';
+import { object, ValidationError } from 'yup';
+import { FormError } from '../components/UncontrolledForm';
+import { Logger } from 'sass';
+import { createLogger } from 'vite';
 
 export type FormValue = string | number | File | boolean | undefined | null;
 
@@ -20,41 +23,44 @@ export enum GenderOptions {
   FEMALE = 'female',
 }
 
-const validationSchema = {
-  name: Yup.string()
+const validationSchema = object().shape({
+  [FormFields.NAME]: Yup.string()
     .required('Name is required')
     .matches(/^[A-Z][a-z]*$/, 'Name should start with an uppercase letter'),
 
-  age: Yup.number()
+  [FormFields.AGE]: Yup.number()
     .required('Age is required')
     .typeError('Age must be a number')
     .positive('Age should be a positive number'),
 
-  email: Yup.string()
+  [FormFields.EMAIL]: Yup.string()
     .required('Email is required')
     .email('Invalid email format'),
 
-  password: Yup.string()
+  [FormFields.PASSWORD]: Yup.string()
     .required('Password is required')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character'
-    ),
+    .matches(/^(?=.*\d)/, 'need 1 digit')
+    .matches(/(?=.*[A-Z])/, 'need 1 uppercase (A-Z)')
+    .matches(/(?=.*[a-z])/, 'need 1 lowercase (a-z)')
+    .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'need 1 special symbol'),
 
-  confirmPassword: Yup.string()
+  [FormFields.CONFIRM_PASSWORD]: Yup.string()
     .required('Confirm Password is required')
-    .oneOf([Yup.ref('password')], 'Passwords must match'),
+    .matches(/(?=.*[A-Z])/, 'need 1 uppercase (A-Z)')
+    .matches(/(?=.*[a-z])/, 'need 1 lowercase (a-z)')
+    .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'need 1 special symbol')
+    .oneOf([Yup.ref(FormFields.PASSWORD)], 'Passwords must match'),
 
-  gender: Yup.boolean().oneOf([true], 'Gender is required'),
+  [FormFields.GENDER]: Yup.boolean().oneOf([true], 'Gender is required'),
 
-  acceptTerms: Yup.boolean().oneOf(
+  [FormFields.ACCEPT_TERMS]: Yup.boolean().oneOf(
     [true],
     'Accept Terms & Conditions is required'
   ),
 
-  picture: Yup.mixed()
+  [FormFields.PICTURE]: Yup.mixed()
     .test('fileSize', 'Picture is required', (value) => {
-      if (value || value instanceof File) return true;
+      if (!value || value instanceof File) return true;
     })
 
     .test('fileSize', 'File size is too large', (value) => {
@@ -65,23 +71,33 @@ const validationSchema = {
         return ['image/jpeg', 'image/png'].includes(value.type);
     }),
 
-  country: Yup.string().required('Country is required'),
-};
+  [FormFields.COUNTRY]: Yup.string().required('Country is required'),
+});
 
-export const validateField = (data: FormValue, key: FormFields) => {
+export const validateField = (
+  data: Record<FormFields, FormValue>,
+  errors: Record<FormFields, FormError>
+) => {
+  const errorsCopy = { ...errors };
+
   try {
-    validationSchema[key].validateSync(data);
-
-    return {
-      isError: false,
-      errorMessage: '',
-    };
+    validationSchema.validateSync(data, { abortEarly: false });
+    return errorsCopy;
   } catch (err) {
     if (err instanceof ValidationError) {
-      return {
-        isError: true,
-        errorMessage: err.message,
-      };
+      return err.inner.reduce(
+        (acc: Record<FormFields, FormError>, error: ValidationError) => {
+          if (error.path) {
+            acc[error.path as FormFields] = {
+              isError: true,
+              errorMessage: error.message,
+            } as FormError;
+          }
+          return acc;
+        },
+        errorsCopy
+      );
     }
+    return errorsCopy;
   }
 };

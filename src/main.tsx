@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.scss';
 import AppRouter from './components/AppRouter';
+import { AppProvider } from './redux/AppProvider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppRouter />
+    <AppProvider>
+      <AppRouter />
+    </AppProvider>
   </React.StrictMode>
 );

@@ -169,17 +169,27 @@ h2 {
 }
 
 .appInput {
-  input {
+  .appInput__input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.5rem 3rem 0.5rem 0.5rem;
     box-sizing: border-box;
     border: 1px solid #a18cd1;
     border-radius: 0.7rem;
     background-color: rgba(255, 255, 255, 0.34);
+    position: relative;
 
     &:focus-visible {
       outline: 1px solid #a18cd1;
     }
+  }
+
+  &__passwordIcon {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    top: 3rem;
+    right: 1rem;
   }
 }
 

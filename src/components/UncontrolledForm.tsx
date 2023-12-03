@@ -12,6 +12,8 @@ import {
   GenderOptions,
   validateField,
 } from '../utils/validateForm';
+import { useDispatch } from '../redux/store';
+import { uncontrolledSlice } from '../redux/slices/uncontolledSlice/uncontrolledSlice';
 
 const startErrorsFormData: Record<FormFields, FormError> = {
   [FormFields.NAME]: { isError: false },
@@ -34,6 +36,7 @@ export interface FormError {
 
 const UncontrolledForm = () => {
   const refs = useCreateRefs();
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState(startErrorsFormData);
 
   const radioOptions = [
@@ -70,12 +73,15 @@ const UncontrolledForm = () => {
         refs[FormFields.COUNTRY].current?.value || undefined,
     };
 
-    Object.keys(inputsData).forEach((key) => {
-      setErrors((prevState) => ({
-        ...prevState,
-        [key]: validateField(inputsData[key as FormFields], key as FormFields),
-      }));
-    });
+    const validationErrors = validateField(inputsData, startErrorsFormData);
+
+    setErrors(validationErrors);
+
+    if (
+      !Object.values(validationErrors).filter((field) => field.isError).length
+    ) {
+      dispatch(uncontrolledSlice.actions.addForm(inputsData));
+    }
   };
 
   return (
@@ -126,7 +132,7 @@ const UncontrolledForm = () => {
             id={FormFields.CONFIRM_PASSWORD}
             inputName="confirmPassword"
             label="Confirm Password:"
-            error={errors[FormFields.PASSWORD]}
+            error={errors[FormFields.CONFIRM_PASSWORD]}
           />
           <AppRadioInputSet
             label="Gender:"
