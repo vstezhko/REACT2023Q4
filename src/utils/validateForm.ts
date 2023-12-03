@@ -1,8 +1,6 @@
 import * as Yup from 'yup';
 import { object, ValidationError } from 'yup';
 import { FormError } from '../components/UncontrolledForm';
-import { Logger } from 'sass';
-import { createLogger } from 'vite';
 
 export type FormValue = string | number | File | boolean | undefined | null;
 

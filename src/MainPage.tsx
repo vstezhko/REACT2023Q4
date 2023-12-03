@@ -1,7 +1,6 @@
 import Card, { CardParams } from './components/Card';
 import { Links } from './types/enums';
 import { useSelector } from './redux/store';
-import { uncontrolledSlice } from './redux/slices/uncontolledSlice/uncontrolledSlice';
 import { FormFields } from './utils/validateForm';
 
 const formsInfo: CardParams[] = [
